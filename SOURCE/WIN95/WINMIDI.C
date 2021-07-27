@@ -162,7 +162,7 @@ int wmidi_get_tech()
 	RegCloseKey(hKey);
 
 //	Okay, look for 'wave' or 'fm' or 'opl'
-	pstr = strlwr(buf);	
+	pstr = _strlwr(buf);	
 	if (strstr(pstr, "wave")) return 1;
 
 	return 0;

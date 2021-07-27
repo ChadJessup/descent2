@@ -79,7 +79,7 @@ void segment_test()
 //vm_angvec_make(&viewer_orient,0x1707,0x49b,0x2e0e);
 //vm_angvec_make(&viewer_orient,0x6e05,0x1601,0xdc0a);
 
-		mprintf(0,"orient = %04x %04x %04x\n",viewer_orient.p,viewer_orient.b,viewer_orient.h);
+		printf(0,"orient = %04x %04x %04x\n",viewer_orient.p,viewer_orient.b,viewer_orient.h);
 //		k=getch(); exit_flag=(k==27); if (k==8) do_int3();
 		vm_angles_2_matrix(&viewer_matrix,&viewer_orient);
 #endif
@@ -116,8 +116,8 @@ void segment_test()
 		gr_ubitmap(0,0,&off_screen_buffer->cv_bitmap);
 #endif
 
-		if (kbhit()) {
-			k=getch();
+		if (_kbhit()) {
+			k=_getch();
 
 			exit_flag=(k==27);
 

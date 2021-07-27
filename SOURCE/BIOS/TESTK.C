@@ -63,20 +63,20 @@ void main (void)
 			key_debug();
 
 		if (keyd_pressed[KEY_UP])
-			putch( 24 );
+			_putch( 24 );
 
 		if (keyd_pressed[KEY_DOWN])
-			putch( 25 );
+			_putch( 25 );
 
 		if (keyd_pressed[KEY_LEFT])
-			putch( 27 );
+			_putch( 27 );
 
 		if (keyd_pressed[KEY_RIGHT])
-			putch( 26 );
+			_putch( 26 );
 
 
 		if (keyd_pressed[KEY_F10])
-			putch( 254 );
+			_putch( 254 );
 
 		if (key_checkch())   {
 			c = key_getch();
@@ -84,7 +84,7 @@ void main (void)
 				if (c==13)
 				   printf("\n");
 				else
-				   putch( c );
+				   _putch( c );
 			}
 			else
 			{

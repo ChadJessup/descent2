@@ -24,7 +24,7 @@ static char rcsid[] = "$Id: playsave.c 2.50 1997/01/24 18:00:07 jeremy Exp $";
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "error.h"
 
@@ -366,7 +366,7 @@ int read_player_file()
 
 #ifndef MACINTOSH
 	//check filename
-	if (file && isatty(fileno(file))) {
+	if (file && isatty(_fileno(file))) {
 		//if the callsign is the name of a tty device, prepend a char
 		fclose(file);
 		sprintf(filename,"$%.7s.plr",Players[Player_num].callsign);
@@ -554,7 +554,7 @@ int find_hli_entry()
 	int i;
 
 	for (i=0;i<n_highest_levels;i++)
-		if (!stricmp(highest_levels[i].shortname,Mission_list[Current_mission_num].filename))
+		if (!_stricmp(highest_levels[i].shortname,Mission_list[Current_mission_num].filename))
 			break;
 
 	if (i==n_highest_levels) {		//not found.  create entry
@@ -597,7 +597,7 @@ int get_highest_level(void)
 #ifndef SATURN
 	if (strlen(Mission_list[Current_mission_num].filename)==0 )	{
 		for (i=0;i<n_highest_levels;i++)
-			if (!stricmp(highest_levels[i].shortname, "DESTSAT")) 	//	Destination Saturn.
+			if (!_stricmp(highest_levels[i].shortname, "DESTSAT")) 	//	Destination Saturn.
 		 		highest_saturn_level			= highest_levels[i].level_num; 
 	}
 #endif
@@ -635,7 +635,7 @@ int write_player_file()
 
 #ifndef MACINTOSH
 	//check filename
-	if (file && isatty(fileno(file))) {
+	if (file && isatty(_fileno(file))) {
 
 		//if the callsign is the name of a tty device, prepend a char
 

@@ -25,7 +25,7 @@ char state_rcsid[] = "$Id: state.c 2.95 1997/01/24 18:35:39 jeremy Exp $";
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <errno.h>
 #ifdef MACINTOSH
 #include <Files.h>

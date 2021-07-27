@@ -71,6 +71,7 @@ short Face_verts[] = {
 	7,		4,		5,		6,
 	0,		3,		2,		1,
 };
+
 segment Seg1 = {
 	0,			// segnum
 	6,			// num_faces
@@ -82,4 +83,3 @@ segment Seg1 = {
 	{   4,    5,    6,    7},				// bvs
 	0				// robots
 };
-ÿ

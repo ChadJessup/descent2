@@ -17,7 +17,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #include <string.h>
 
 #include <fcntl.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "pa_enabl.h"                   //$$POLY_ACC
 #include "mem.h"
@@ -1081,7 +1081,7 @@ int gr_string(int x, int y, char *s )
 
 	if ( clipped & 2 )	{
 		// Completely clipped...
-		mprintf( (1, "Text '%s' at (%d,%d) is off screen!\n", s, x, y ));
+		printf( (1, "Text '%s' at (%d,%d) is off screen!\n", s, x, y ));
 		return 0;
 	}
 
@@ -1439,7 +1439,7 @@ void gr_remap_font( grs_font *font, char * fontname )
 		ubyte colormap[256];
 		int freq[256];
 
-		cfseek(fontfile,-sizeof(palette),SEEK_END);
+		//cfseek(fontfile,-sizeof(palette),SEEK_END);
 
 		cfread(palette,3,256,fontfile);		//read the palette
 

@@ -248,7 +248,7 @@ int key_getch()
 	int dummy=0;
 	
 	if (!Installed)
-		return getch();
+		return _getch();
 
 	while (!key_checkch())
 		dummy++;

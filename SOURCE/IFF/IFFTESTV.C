@@ -51,7 +51,7 @@ main(int argc,char **argv)
 
 		draw_ubitmap(0,0,&my_bitmap);
 	
-		getch();
+		_getch();
 
 	}
 

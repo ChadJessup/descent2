@@ -84,7 +84,7 @@ short gr_vesa_check_mode(short mode)
 		if (!pDosBuffer)
 			Error( "Error allocating DOS buffer" );
 	}
-	memset( &rr, 0, sizeof(dpmi_real_regs);		// Clear real registers...
+	memset( &rr, 0, sizeof(dpmi_real_regs));		// Clear real registers...
 	rr.eax = 0x4f00;	// Return SuperVGA information
 	rr.es = DPMI_real_segment(pDosBuffer);
 	rr.edi = DPMI_real_offset(pDosBuffer);
@@ -115,7 +115,7 @@ short gr_vesa_check_mode(short mode)
 		return 4;		// Video card doesn't support that VESA mode.
 	}
 			
-	memset( &rr, 0, sizeof(dpmi_real_regs);		// Clear real registers...
+	memset( &rr, 0, sizeof(dpmi_real_regs));		// Clear real registers...
 	rr.eax = 0x4f01;	// Return SuperVGA mode information
 	rr.ecx = mode;		// Super VGA video mode
 	rr.es = DPMI_real_segment(pDosBuffer);

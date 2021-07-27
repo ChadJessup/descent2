@@ -14,7 +14,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #ifndef _AI_H
 #define _AI_H
-
+#include <windows.h>
 #include <stdio.h>
 
 #include "object.h"

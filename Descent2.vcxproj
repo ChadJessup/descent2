@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{eeb8d752-13f6-43ec-9cfb-600b969066ce}</ProjectGuid>
+    <RootNamespace>Descent2</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WINDOWS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>
+      C:\Projects\descent2\SOURCE\WIN95;
+      C:\Projects\descent2\SOURCE\vga;
+      C:\Projects\descent2\SOURCE\iff;
+      C:\Projects\descent2\SOURCE\vecmat;
+      C:\Projects\descent2\SOURCE\main;C:\Projects\descent2\SOURCE\2d;C:\Projects\descent2\SOURCE\3d;C:\Projects\descent2\SOURCE\CFILE;C:\Projects\descent2\SOURCE\MISC;C:\Projects\descent2\SOURCE\PA_NULL;C:\Projects\descent2\SOURCE\BIOS\;C:\Projects\descent2\SOURCE\MEM;C:\Projects\descent2\SOURCE\FIX;C:\Projects\descent2\SOURCE\;C:\Projects\descent2\SOURCE\INCLUDES;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SOURCE\2D\BITBLT.C" />
+    <ClCompile Include="SOURCE\2D\BITMAP.C" />
+    <ClCompile Include="SOURCE\2D\BOX.C" />
+    <ClCompile Include="SOURCE\2D\CANVAS.C" />
+    <ClCompile Include="SOURCE\2D\CIRCLE.C" />
+    <ClCompile Include="SOURCE\2D\CURSOR.C" />
+    <ClCompile Include="SOURCE\2D\DISC.C" />
+    <ClCompile Include="SOURCE\2D\EFFECTS.C" />
+    <ClCompile Include="SOURCE\2D\FONT.C" />
+    <ClCompile Include="SOURCE\2D\GPIXEL.C" />
+    <ClCompile Include="SOURCE\2D\GR.C" />
+    <ClCompile Include="SOURCE\2D\IBITBLT.C" />
+    <ClCompile Include="SOURCE\2D\LINE.C" />
+    <ClCompile Include="SOURCE\2D\MACSTUBS.C" />
+    <ClCompile Include="SOURCE\2D\MSPEED.C" />
+    <ClCompile Include="SOURCE\2D\NONVESA.C" />
+    <ClCompile Include="SOURCE\2D\PCX.C" />
+    <ClCompile Include="SOURCE\2D\PIXEL.C" />
+    <ClCompile Include="SOURCE\2D\POLY.C" />
+    <ClCompile Include="SOURCE\2D\RECT.C" />
+    <ClCompile Include="SOURCE\2D\RLE.C" />
+    <ClCompile Include="SOURCE\2D\SCALE.C" />
+    <ClCompile Include="SOURCE\2D\SCALEMAC.C" />
+    <ClCompile Include="SOURCE\2D\SCANLINE.C" />
+    <ClCompile Include="SOURCE\2D\TMAPBITS.C" />
+    <ClCompile Include="SOURCE\2D\TPOLY.C" />
+    <ClCompile Include="SOURCE\2D\VESALIB.C" />
+    <ClCompile Include="SOURCE\2D\VESATEST.C" />
+    <ClCompile Include="SOURCE\3D\3DTEST.C" />
+    <ClCompile Include="SOURCE\3D\DRAW_SEG.C" />
+    <ClCompile Include="SOURCE\3D\OUT.C" />
+    <ClCompile Include="SOURCE\3D\SEGMENT.C" />
+    <ClCompile Include="SOURCE\3D\TRAKBALL.C" />
+    <ClCompile Include="SOURCE\3D\UPVECS.C" />
+    <ClCompile Include="SOURCE\3D\UPVECS2.C" />
+    <ClCompile Include="SOURCE\3D\VECVIEW.C" />
+    <ClCompile Include="SOURCE\3D\VECVIEW2.C" />
+    <ClCompile Include="SOURCE\BIOS\DPMI.C" />
+    <ClCompile Include="SOURCE\BIOS\ERROR.C" />
+    <ClCompile Include="SOURCE\BIOS\FINDFILE.C" />
+    <ClCompile Include="SOURCE\BIOS\IPX.C" />
+    <ClCompile Include="SOURCE\BIOS\JOYC.C" />
+    <ClCompile Include="SOURCE\BIOS\KEY.C" />
+    <ClCompile Include="SOURCE\BIOS\MONO.C" />
+    <ClCompile Include="SOURCE\BIOS\MOUSE.C" />
+    <ClCompile Include="SOURCE\BIOS\RBAUDIO.C" />
+    <ClCompile Include="SOURCE\BIOS\SPEAKER.C" />
+    <ClCompile Include="SOURCE\BIOS\TESTJ.C" />
+    <ClCompile Include="SOURCE\BIOS\TESTK.C" />
+    <ClCompile Include="SOURCE\BIOS\TESTM.C" />
+    <ClCompile Include="SOURCE\BIOS\TESTMS.C" />
+    <ClCompile Include="SOURCE\BIOS\TESTT.C" />
+    <ClCompile Include="SOURCE\BIOS\TIMERP.C" />
+    <ClCompile Include="SOURCE\BIOS\X.C" />
+    <ClCompile Include="SOURCE\CFILE\CFILE.C" />
+    <ClCompile Include="SOURCE\FIX\ASINGEN.C" />
+    <ClCompile Include="SOURCE\FIX\FIXTEST.C" />
+    <ClCompile Include="SOURCE\FIX\SINGEN.C" />
+    <ClCompile Include="SOURCE\IFF\ARCHIVE\IFF15BPP.C" />
+    <ClCompile Include="SOURCE\IFF\ARCHIVE\IFF8BPP.C" />
+    <ClCompile Include="SOURCE\IFF\ARCHIVE\IFFMIKE.C" />
+    <ClCompile Include="SOURCE\IFF\IFF.C" />
+    <ClCompile Include="SOURCE\IFF\IFFTEST.C" />
+    <ClCompile Include="SOURCE\IFF\IFFTESTV.C" />
+    <ClCompile Include="SOURCE\INCLUDES\TEST.C" />
+    <ClCompile Include="SOURCE\MAIN\3DFX.C" />
+    <ClCompile Include="SOURCE\MAIN\AI.C" />
+    <ClCompile Include="SOURCE\MAIN\AI2.C" />
+    <ClCompile Include="SOURCE\MAIN\AIPATH.C" />
+    <ClCompile Include="SOURCE\MAIN\ARCADE.C" />
+    <ClCompile Include="SOURCE\MAIN\AUTOMAP.C" />
+    <ClCompile Include="SOURCE\MAIN\BM.C" />
+    <ClCompile Include="SOURCE\MAIN\BMREAD.C" />
+    <ClCompile Include="SOURCE\MAIN\CDMIX32.C" />
+    <ClCompile Include="SOURCE\MAIN\CDROM.C" />
+    <ClCompile Include="SOURCE\MAIN\CNTRLCEN.C" />
+    <ClCompile Include="SOURCE\MAIN\COINDEV.C" />
+    <ClCompile Include="SOURCE\MAIN\COLLIDE.C" />
+    <ClCompile Include="SOURCE\MAIN\CONFIG.C" />
+    <ClCompile Include="SOURCE\MAIN\CONTROLS.C" />
+    <ClCompile Include="SOURCE\MAIN\CREDITS.C" />
+    <ClCompile Include="SOURCE\MAIN\CRYPT.C" />
+    <ClCompile Include="SOURCE\MAIN\DESCENTW.C" />
+    <ClCompile Include="SOURCE\MAIN\DIGI.C" />
+    <ClCompile Include="SOURCE\MAIN\DIGIOBJ.C" />
+    <ClCompile Include="SOURCE\MAIN\DUMPMINE.C" />
+    <ClCompile Include="SOURCE\MAIN\EFFECTS.C" />
+    <ClCompile Include="SOURCE\MAIN\ENDLEVEL.C" />
+    <ClCompile Include="SOURCE\MAIN\ESCORT.C" />
+    <ClCompile Include="SOURCE\MAIN\FIREBALL.C" />
+    <ClCompile Include="SOURCE\MAIN\FUELCEN.C" />
+    <ClCompile Include="SOURCE\MAIN\FVI.C" />
+    <ClCompile Include="SOURCE\MAIN\GAME.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMECNTL.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMEFONT.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMEMINE.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMEPAL.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMEREND.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMESAVE.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMESEG.C" />
+    <ClCompile Include="SOURCE\MAIN\GAMESEQ.C" />
+    <ClCompile Include="SOURCE\MAIN\GAUGES.C" />
+    <ClCompile Include="SOURCE\MAIN\HOSTAGE.C" />
+    <ClCompile Include="SOURCE\MAIN\HUD.C" />
+    <ClCompile Include="SOURCE\MAIN\IGLASSES.C" />
+    <ClCompile Include="SOURCE\MAIN\INFERNO.C" />
+    <ClCompile Include="SOURCE\MAIN\JOYDEFS.C" />
+    <ClCompile Include="SOURCE\MAIN\JOYDEFSW.C" />
+    <ClCompile Include="SOURCE\MAIN\KCONFIG.C" />
+    <ClCompile Include="SOURCE\MAIN\KMATRIX.C" />
+    <ClCompile Include="SOURCE\MAIN\LASER.C" />
+    <ClCompile Include="SOURCE\MAIN\LIGHTING.C" />
+    <ClCompile Include="SOURCE\MAIN\MENU.C" />
+    <ClCompile Include="SOURCE\MAIN\MGLOBAL.C" />
+    <ClCompile Include="SOURCE\MAIN\MISSION.C" />
+    <ClCompile Include="SOURCE\MAIN\MODEM.C" />
+    <ClCompile Include="SOURCE\MAIN\MORPH.C" />
+    <ClCompile Include="SOURCE\MAIN\MOVIE.C" />
+    <ClCompile Include="SOURCE\MAIN\MULTI.C" />
+    <ClCompile Include="SOURCE\MAIN\MULTIBOT.C" />
+    <ClCompile Include="SOURCE\MAIN\NETMISC.C" />
+    <ClCompile Include="SOURCE\MAIN\NETWORK.C" />
+    <ClCompile Include="SOURCE\MAIN\NEWDEMO.C" />
+    <ClCompile Include="SOURCE\MAIN\NEWMENU.C" />
+    <ClCompile Include="SOURCE\MAIN\NEWMODEL.C" />
+    <ClCompile Include="SOURCE\MAIN\OBJECT.C" />
+    <ClCompile Include="SOURCE\MAIN\PAGING.C" />
+    <ClCompile Include="SOURCE\MAIN\PHYSICS.C" />
+    <ClCompile Include="SOURCE\MAIN\PIGGY.C" />
+    <ClCompile Include="SOURCE\MAIN\PLAYSAVE.C" />
+    <ClCompile Include="SOURCE\MAIN\POLYOBJ.C" />
+    <ClCompile Include="SOURCE\MAIN\POWERUP.C" />
+    <ClCompile Include="SOURCE\MAIN\RBTEST.C" />
+    <ClCompile Include="SOURCE\MAIN\RENDER.C" />
+    <ClCompile Include="SOURCE\MAIN\ROBOT.C" />
+    <ClCompile Include="SOURCE\MAIN\SCORES.C" />
+    <ClCompile Include="SOURCE\MAIN\SLEW.C" />
+    <ClCompile Include="SOURCE\MAIN\SONGS.C" />
+    <ClCompile Include="SOURCE\MAIN\STATE.C" />
+    <ClCompile Include="SOURCE\MAIN\SWITCH.C" />
+    <ClCompile Include="SOURCE\MAIN\TERRAIN.C" />
+    <ClCompile Include="SOURCE\MAIN\TEXMERGE.C" />
+    <ClCompile Include="SOURCE\MAIN\TEXT.C" />
+    <ClCompile Include="SOURCE\MAIN\TITLES.C" />
+    <ClCompile Include="SOURCE\MAIN\VCLIP.C" />
+    <ClCompile Include="SOURCE\MAIN\WALL.C" />
+    <ClCompile Include="SOURCE\MAIN\WEAPON.C" />
+    <ClCompile Include="SOURCE\MAIN\WINDIGI.C" />
+    <ClCompile Include="SOURCE\MAIN\WINFERNO.C" />
+    <ClCompile Include="SOURCE\MAIN\WINMODEM.C" />
+    <ClCompile Include="SOURCE\MAIN\WINVIDEO.C" />
+    <ClCompile Include="SOURCE\MEM\MEM.C" />
+    <ClCompile Include="SOURCE\MISC\ARGS.C" />
+    <ClCompile Include="SOURCE\MISC\BYTESWAP.C" />
+    <ClCompile Include="SOURCE\MISC\ERRTEST.C" />
+    <ClCompile Include="SOURCE\MISC\FILEUTIL.C" />
+    <ClCompile Include="SOURCE\MISC\HASH.C" />
+    <ClCompile Include="SOURCE\MISC\PARSARG.C" />
+    <ClCompile Include="SOURCE\MISC\PARSTEST.C" />
+    <ClCompile Include="SOURCE\MISC\STRUTIL.C" />
+    <ClCompile Include="SOURCE\NOVGA\NOVESA.C" />
+    <ClCompile Include="SOURCE\PA_NULL\POLY_ACC.C" />
+    <ClCompile Include="SOURCE\TEXMAP\NTMAP.C" />
+    <ClCompile Include="SOURCE\TEXMAP\SCANLINE.C" />
+    <ClCompile Include="SOURCE\TEXMAP\TMAPFLAT.C" />
+    <ClCompile Include="SOURCE\UI\BARBOX.C" />
+    <ClCompile Include="SOURCE\UI\BUTTON.C" />
+    <ClCompile Include="SOURCE\UI\CHECKBOX.C" />
+    <ClCompile Include="SOURCE\UI\FILE.C" />
+    <ClCompile Include="SOURCE\UI\FUNC.C" />
+    <ClCompile Include="SOURCE\UI\GADGET.C" />
+    <ClCompile Include="SOURCE\UI\HARDERR.C" />
+    <ClCompile Include="SOURCE\UI\ICON.C" />
+    <ClCompile Include="SOURCE\UI\INPUTBOX.C" />
+    <ClCompile Include="SOURCE\UI\KEYPAD.C" />
+    <ClCompile Include="SOURCE\UI\KEYPRESS.C" />
+    <ClCompile Include="SOURCE\UI\KEYTRAP.C" />
+    <ClCompile Include="SOURCE\UI\LISTBOX.C" />
+    <ClCompile Include="SOURCE\UI\MEDFUNC.C" />
+    <ClCompile Include="SOURCE\UI\MENU.C" />
+    <ClCompile Include="SOURCE\UI\MENUBAR.C" />
+    <ClCompile Include="SOURCE\UI\MESSAGE.C" />
+    <ClCompile Include="SOURCE\UI\MOUSE.C" />
+    <ClCompile Include="SOURCE\UI\NUMBER.C" />
+    <ClCompile Include="SOURCE\UI\POPUP.C" />
+    <ClCompile Include="SOURCE\UI\RADIO.C" />
+    <ClCompile Include="SOURCE\UI\SCROLL.C" />
+    <ClCompile Include="SOURCE\UI\UI.C" />
+    <ClCompile Include="SOURCE\UI\UIDRAW.C" />
+    <ClCompile Include="SOURCE\UI\USERBOX.C" />
+    <ClCompile Include="SOURCE\UI\WINDOW.C" />
+    <ClCompile Include="SOURCE\VECMAT\BUG.C" />
+    <ClCompile Include="SOURCE\VECMAT\DISTTEST.C" />
+    <ClCompile Include="SOURCE\VECMAT\VECTEST.C" />
+    <ClCompile Include="SOURCE\VGA\FRAMEBUF.C" />
+    <ClCompile Include="SOURCE\VGA\NEW\PALETTE.C" />
+    <ClCompile Include="SOURCE\VGA\NEW\VGA.C" />
+    <ClCompile Include="SOURCE\VGA\PALETTE.C" />
+    <ClCompile Include="SOURCE\VGA\VGA.C" />
+    <ClCompile Include="SOURCE\WIN95\COMM.C" />
+    <ClCompile Include="SOURCE\WIN95\DD.C" />
+    <ClCompile Include="SOURCE\WIN95\DDGFX.C" />
+    <ClCompile Include="SOURCE\WIN95\DDGR.C" />
+    <ClCompile Include="SOURCE\WIN95\DDRAW.C" />
+    <ClCompile Include="SOURCE\WIN95\DIRECT3D.C" />
+    <ClCompile Include="SOURCE\WIN95\DS.C" />
+    <ClCompile Include="SOURCE\WIN95\ERROR.C" />
+    <ClCompile Include="SOURCE\WIN95\FINDFILE.C" />
+    <ClCompile Include="SOURCE\WIN95\GFX.C" />
+    <ClCompile Include="SOURCE\WIN95\IFORCE.C" />
+    <ClCompile Include="SOURCE\WIN95\IPX.C" />
+    <ClCompile Include="SOURCE\WIN95\JOYC.C" />
+    <ClCompile Include="SOURCE\WIN95\KEY.C" />
+    <ClCompile Include="SOURCE\WIN95\MONO.C" />
+    <ClCompile Include="SOURCE\WIN95\MOUSE.C" />
+    <ClCompile Include="SOURCE\WIN95\PALETTE.C" />
+    <ClCompile Include="SOURCE\WIN95\RBAUDIO.C" />
+    <ClCompile Include="SOURCE\WIN95\SWIFT.C" />
+    <ClCompile Include="SOURCE\WIN95\TACTILE.C" />
+    <ClCompile Include="SOURCE\WIN95\TIMER.C" />
+    <ClCompile Include="SOURCE\WIN95\WINAPP.C" />
+    <ClCompile Include="SOURCE\WIN95\WINMIDI.C" />
+    <ClCompile Include="SOURCE\WIN95\WINMONO.C" />
+    <ClCompile Include="SOURCE\WIN95\WINREGS.C" />
+    <ClCompile Include="SOURCE\WIN95\XTAPI.C" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SOURCE\2D\CLIP.H" />
+    <ClInclude Include="SOURCE\2D\EFFECT2D.H" />
+    <ClInclude Include="SOURCE\2D\EFFECTS.H" />
+    <ClInclude Include="SOURCE\2D\GR.H" />
+    <ClInclude Include="SOURCE\2D\GRDEF.H" />
+    <ClInclude Include="SOURCE\2D\IBITBLT.H" />
+    <ClInclude Include="SOURCE\2D\PAGING.H" />
+    <ClInclude Include="SOURCE\2D\PALETTE.H" />
+    <ClInclude Include="SOURCE\2D\PCX.H" />
+    <ClInclude Include="SOURCE\2D\RLE.H" />
+    <ClInclude Include="SOURCE\3D\3D.H" />
+    <ClInclude Include="SOURCE\BIOS\DPMI.H" />
+    <ClInclude Include="SOURCE\BIOS\ERROR.H" />
+    <ClInclude Include="SOURCE\BIOS\FINDFILE.H" />
+    <ClInclude Include="SOURCE\BIOS\IPX.H" />
+    <ClInclude Include="SOURCE\BIOS\JOY.H" />
+    <ClInclude Include="SOURCE\BIOS\KEY.H" />
+    <ClInclude Include="SOURCE\BIOS\MONO.H" />
+    <ClInclude Include="SOURCE\BIOS\MOUSE.H" />
+    <ClInclude Include="SOURCE\BIOS\RBAUDIO.H" />
+    <ClInclude Include="SOURCE\BIOS\SWIFTCFG.H" />
+    <ClInclude Include="SOURCE\BIOS\TIMER.H" />
+    <ClInclude Include="SOURCE\CFILE\CFILE.H" />
+    <ClInclude Include="SOURCE\CFILE\NOCFILE.H" />
+    <ClInclude Include="SOURCE\DIV\DIV0.H" />
+    <ClInclude Include="SOURCE\FIX\FIX.H" />
+    <ClInclude Include="SOURCE\IFF\IFF.H" />
+    <ClInclude Include="SOURCE\IFF\VESA.H" />
+    <ClInclude Include="SOURCE\INCLUDES\DTYPES.H" />
+    <ClInclude Include="SOURCE\INCLUDES\PSTYPES.H" />
+    <ClInclude Include="SOURCE\LIB\FIX.H" />
+    <ClInclude Include="SOURCE\LIB\RBAUDIO.H" />
+    <ClInclude Include="SOURCE\MAIN\3DFX_DES.H" />
+    <ClInclude Include="SOURCE\MAIN\AI.H" />
+    <ClInclude Include="SOURCE\MAIN\AISTRUCT.H" />
+    <ClInclude Include="SOURCE\MAIN\ARCADE.H" />
+    <ClInclude Include="SOURCE\MAIN\AUTOMAP.H" />
+    <ClInclude Include="SOURCE\MAIN\BM.H" />
+    <ClInclude Include="SOURCE\MAIN\BMREAD.H" />
+    <ClInclude Include="SOURCE\MAIN\CDROM.H" />
+    <ClInclude Include="SOURCE\MAIN\CNTRLCEN.H" />
+    <ClInclude Include="SOURCE\MAIN\COINDEV.H" />
+    <ClInclude Include="SOURCE\MAIN\COLLIDE.H" />
+    <ClInclude Include="SOURCE\MAIN\COMPBIT.H" />
+    <ClInclude Include="SOURCE\MAIN\CONFIG.H" />
+    <ClInclude Include="SOURCE\MAIN\CONTROLS.H" />
+    <ClInclude Include="SOURCE\MAIN\CREDITS.H" />
+    <ClInclude Include="SOURCE\MAIN\DESC_ID.H" />
+    <ClInclude Include="SOURCE\MAIN\DESW.H" />
+    <ClInclude Include="SOURCE\MAIN\DIGI.H" />
+    <ClInclude Include="SOURCE\MAIN\EDITOR\EDITOR.H" />
+    <ClInclude Include="SOURCE\MAIN\EDITOR\KDEFS.H" />
+    <ClInclude Include="SOURCE\MAIN\EDITOR\TEXPAGE.H" />
+    <ClInclude Include="SOURCE\MAIN\EFFECTS.H" />
+    <ClInclude Include="SOURCE\MAIN\ENDLEVEL.H" />
+    <ClInclude Include="SOURCE\MAIN\FILES.H" />
+    <ClInclude Include="SOURCE\MAIN\FIREBALL.H" />
+    <ClInclude Include="SOURCE\MAIN\FUELCEN.H" />
+    <ClInclude Include="SOURCE\MAIN\FVI.H" />
+    <ClInclude Include="SOURCE\MAIN\GAME.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMEFONT.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMEMINE.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMEPAL.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMESAVE.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMESEG.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMESEQ.H" />
+    <ClInclude Include="SOURCE\MAIN\GAMESTAT.H" />
+    <ClInclude Include="SOURCE\MAIN\GAUGES.H" />
+    <ClInclude Include="SOURCE\MAIN\HOSTAGE.H" />
+    <ClInclude Include="SOURCE\MAIN\IGLASSES.H" />
+    <ClInclude Include="SOURCE\MAIN\INFERNO.H" />
+    <ClInclude Include="SOURCE\MAIN\JOYDEFS.H" />
+    <ClInclude Include="SOURCE\MAIN\KCONFIG.H" />
+    <ClInclude Include="SOURCE\MAIN\KMATRIX.H" />
+    <ClInclude Include="SOURCE\MAIN\LASER.H" />
+    <ClInclude Include="SOURCE\MAIN\LIGHTING.H" />
+    <ClInclude Include="SOURCE\MAIN\MENU.H" />
+    <ClInclude Include="SOURCE\MAIN\MISSION.H" />
+    <ClInclude Include="SOURCE\MAIN\MODEM.H" />
+    <ClInclude Include="SOURCE\MAIN\MORPH.H" />
+    <ClInclude Include="SOURCE\MAIN\MOVIE.H" />
+    <ClInclude Include="SOURCE\MAIN\MULTI.H" />
+    <ClInclude Include="SOURCE\MAIN\MULTIBOT.H" />
+    <ClInclude Include="SOURCE\MAIN\NETMISC.H" />
+    <ClInclude Include="SOURCE\MAIN\NETWORK.H" />
+    <ClInclude Include="SOURCE\MAIN\NEWDEMO.H" />
+    <ClInclude Include="SOURCE\MAIN\NEWMENU.H" />
+    <ClInclude Include="SOURCE\MAIN\OBJECT.H" />
+    <ClInclude Include="SOURCE\MAIN\PAGING.H" />
+    <ClInclude Include="SOURCE\MAIN\PHYSICS.H" />
+    <ClInclude Include="SOURCE\MAIN\PIGGY.H" />
+    <ClInclude Include="SOURCE\MAIN\PLAYER.H" />
+    <ClInclude Include="SOURCE\MAIN\PLAYSAVE.H" />
+    <ClInclude Include="SOURCE\MAIN\POLYOBJ.H" />
+    <ClInclude Include="SOURCE\MAIN\POWERUP.H" />
+    <ClInclude Include="SOURCE\MAIN\RENDER.H" />
+    <ClInclude Include="SOURCE\MAIN\ROBOT.H" />
+    <ClInclude Include="SOURCE\MAIN\SCORES.H" />
+    <ClInclude Include="SOURCE\MAIN\SCREENS.H" />
+    <ClInclude Include="SOURCE\MAIN\SEGMENT.H" />
+    <ClInclude Include="SOURCE\MAIN\SEGPOINT.H" />
+    <ClInclude Include="SOURCE\MAIN\SETTINGS.H" />
+    <ClInclude Include="SOURCE\MAIN\SLEW.H" />
+    <ClInclude Include="SOURCE\MAIN\SONGS.H" />
+    <ClInclude Include="SOURCE\MAIN\SOUNDS.H" />
+    <ClInclude Include="SOURCE\MAIN\STATE.H" />
+    <ClInclude Include="SOURCE\MAIN\SWITCH.H" />
+    <ClInclude Include="SOURCE\MAIN\TERRAIN.H" />
+    <ClInclude Include="SOURCE\MAIN\TEXMERGE.H" />
+    <ClInclude Include="SOURCE\MAIN\TEXT.H" />
+    <ClInclude Include="SOURCE\MAIN\TEXTURES.H" />
+    <ClInclude Include="SOURCE\MAIN\TITLES.H" />
+    <ClInclude Include="SOURCE\MAIN\VCLIP.H" />
+    <ClInclude Include="SOURCE\MAIN\VERS_ID.H" />
+    <ClInclude Include="SOURCE\MAIN\WALL.H" />
+    <ClInclude Include="SOURCE\MAIN\WEAPON.H" />
+    <ClInclude Include="SOURCE\MEM\MEM.H" />
+    <ClInclude Include="SOURCE\MISC\ARGS.H" />
+    <ClInclude Include="SOURCE\MISC\BYTESWAP.H" />
+    <ClInclude Include="SOURCE\MISC\DEBUG.H" />
+    <ClInclude Include="SOURCE\MISC\FILEUTIL.H" />
+    <ClInclude Include="SOURCE\MISC\HASH.H" />
+    <ClInclude Include="SOURCE\MISC\PARSARG.H" />
+    <ClInclude Include="SOURCE\MISC\STRUTIL.H" />
+    <ClInclude Include="SOURCE\PA_NULL\PA_ENABL.H" />
+    <ClInclude Include="SOURCE\PA_NULL\POLY_ACC.H" />
+    <ClInclude Include="SOURCE\TEXMAP\NTMAPOUT.H" />
+    <ClInclude Include="SOURCE\TEXMAP\SCANLINE.H" />
+    <ClInclude Include="SOURCE\TEXMAP\TEXMAP.H" />
+    <ClInclude Include="SOURCE\TEXMAP\TEXMAPL.H" />
+    <ClInclude Include="SOURCE\UI\FUNC.H" />
+    <ClInclude Include="SOURCE\UI\UI.H" />
+    <ClInclude Include="SOURCE\VECMAT\VECMAT.H" />
+    <ClInclude Include="SOURCE\VGA\FXDPMI.H" />
+    <ClInclude Include="SOURCE\VGA\FXVESA.H" />
+    <ClInclude Include="SOURCE\VGA\GRX.H" />
+    <ClInclude Include="SOURCE\VGA\VGA.H" />
+    <ClInclude Include="SOURCE\WIN95\COMM.H" />
+    <ClInclude Include="SOURCE\WIN95\DD.H" />
+    <ClInclude Include="SOURCE\WIN95\DIRECT3D.H" />
+    <ClInclude Include="SOURCE\WIN95\DS.H" />
+    <ClInclude Include="SOURCE\WIN95\ERROR.H" />
+    <ClInclude Include="SOURCE\WIN95\GLOBAL.H" />
+    <ClInclude Include="SOURCE\WIN95\IFORCE.H" />
+    <ClInclude Include="SOURCE\WIN95\MIDIFILE.H" />
+    <ClInclude Include="SOURCE\WIN95\MIDISEQ.H" />
+    <ClInclude Include="SOURCE\WIN95\TACTILE.H" />
+    <ClInclude Include="SOURCE\WIN95\WINAPP.H" />
+    <ClInclude Include="SOURCE\WIN95\WINMIDI.H" />
+    <ClInclude Include="SOURCE\WIN95\WINREGS.H" />
+    <ClInclude Include="SOURCE\WIN95\XTAPI.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SOURCE\2D\GR.INC" />
+    <None Include="SOURCE\2D\LBITBLT.ASM" />
+    <None Include="SOURCE\2D\LINEAR.ASM" />
+    <None Include="SOURCE\2D\PAGING.ASM" />
+    <None Include="SOURCE\2D\PFLOW.ASM" />
+    <None Include="SOURCE\2D\SCALEA.ASM" />
+    <None Include="SOURCE\2D\SELECTOR.ASM" />
+    <None Include="SOURCE\3D\3D.INC" />
+    <None Include="SOURCE\3D\CLIPPER.ASM" />
+    <None Include="SOURCE\3D\DRAW.ASM" />
+    <None Include="SOURCE\3D\GLOBVARS.ASM" />
+    <None Include="SOURCE\3D\HORIZON.ASM" />
+    <None Include="SOURCE\3D\INSTANCE.ASM" />
+    <None Include="SOURCE\3D\INTERP.ASM" />
+    <None Include="SOURCE\3D\MATRIX.ASM" />
+    <None Include="SOURCE\3D\OBJECTS.ASM" />
+    <None Include="SOURCE\3D\POINTS.ASM" />
+    <None Include="SOURCE\3D\ROD.ASM" />
+    <None Include="SOURCE\3D\SETUP.ASM" />
+    <None Include="SOURCE\BIOS\JOY.ASM" />
+    <None Include="SOURCE\BIOS\KEY.ASM" />
+    <None Include="SOURCE\BIOS\KEYS.INC" />
+    <None Include="SOURCE\BIOS\MOUSE.ASM" />
+    <None Include="SOURCE\BIOS\OLDKEY.ASM" />
+    <None Include="SOURCE\BIOS\TIMER.ASM" />
+    <None Include="SOURCE\DIV\DIV0.ASM" />
+    <None Include="SOURCE\DIV\DIV0.INC" />
+    <None Include="SOURCE\FIX\FIX.ASM" />
+    <None Include="SOURCE\FIX\FIX.INC" />
+    <None Include="SOURCE\FIX\TEST.ASM" />
+    <None Include="SOURCE\INCLUDES\DTYPES.INC" />
+    <None Include="SOURCE\INCLUDES\PSMACROS.INC" />
+    <None Include="SOURCE\INCLUDES\PSTYPES.INC" />
+    <None Include="SOURCE\TEXMAP\TMAPFADE.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_ED.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_FLT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_INC.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_LLN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_LLT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_LNN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_LNT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_PER.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_PLN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_PLT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_PNN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_PNT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_QLN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_QLT.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_QNN.ASM" />
+    <None Include="SOURCE\TEXMAP\TMAP_QNT.ASM" />
+    <None Include="SOURCE\VECMAT\SML9X9.ASM" />
+    <None Include="SOURCE\VECMAT\VECMAT.ASM" />
+    <None Include="SOURCE\VECMAT\VECMAT.INC" />
+    <None Include="SOURCE\VGA\MODEX.ASM" />
+    <None Include="SOURCE\VGA\TWEAK.INC" />
+    <None Include="SOURCE\VGA\VESA.ASM" />
+    <None Include="SOURCE\VGA\VGAREGS.INC" />
+    <None Include="SOURCE\WIN95\WINCKPIT.ASM" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SOURCE\NOVGA\FILES.RC" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

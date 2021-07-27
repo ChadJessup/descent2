@@ -82,7 +82,7 @@ main(int argc,char **argv)
 
 			gr_ubitmap(0,0,bm_list[i]);
 
-			key = getch();
+			key = _getch();
 
 			if (key=='-') {if (i) i--;}
 			else i++;

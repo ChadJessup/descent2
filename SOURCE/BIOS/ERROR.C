@@ -158,7 +158,7 @@ void Warning(char *fmt,...)
 	vsprintf(warn_message+strlen(warn_message),fmt,arglist);
 	va_end(arglist);
 
-	mprintf((0, "%s\n", warn_message));
+	printf((0, "%s\n", warn_message));
 	(*warn_func)(warn_message);
 
 }

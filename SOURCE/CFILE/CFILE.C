@@ -23,7 +23,7 @@ static char rcsid[] = "$Id: cfile.c 1.43 1996/03/23 13:03:21 jeremy Exp $";
 #include <ctype.h>
 #include <stdarg.h>
 #include <fcntl.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <errno.h>
 #include <string.h>
 
@@ -198,7 +198,7 @@ FILE * cfile_find_libfile(char * name, int * length)
 
 	if ( AltHogfile_initialized )	{
 		for (i=0; i<AltNum_hogfiles; i++ )	{
-			if ( !stricmp( AltHogFiles[i].name, name ))	{
+			if ( !_stricmp( AltHogFiles[i].name, name ))	{
 				fp = cfile_get_filehandle( AltHogFilename, "rb" );
 				if ( fp == NULL ) return NULL;
 				fseek( fp,  AltHogFiles[i].offset, SEEK_SET );
@@ -216,7 +216,7 @@ FILE * cfile_find_libfile(char * name, int * length)
 	}
 
 	for (i=0; i<Num_hogfiles; i++ )	{
-		if ( !stricmp( HogFiles[i].name, name ))	{
+		if ( !_stricmp( HogFiles[i].name, name ))	{
 			fp = cfile_get_filehandle( HogFilename, "rb" );
 			if ( fp == NULL ) return NULL;
 			fseek( fp,  HogFiles[i].offset, SEEK_SET );
@@ -281,7 +281,7 @@ CFILE * cfopen(char * filename, char * mode )
 	FILE * fp;
 	CFILE *cfile;
 	
-	if (stricmp( mode, "rb"))	{
+	if (_stricmp( mode, "rb"))	{
 		Error( "cfiles can only be opened with mode==rb\n" );
 	}
 
@@ -320,7 +320,7 @@ CFILE * cfopen(char * filename, char * mode )
 			return NULL;
 		}
 		cfile->file = fp;
-		cfile->size = filelength( fileno(fp) );
+		cfile->size = filelength( _fileno(fp) );
 		cfile->lib_offset = 0;
 		cfile->raw_position = 0;
 		return cfile;

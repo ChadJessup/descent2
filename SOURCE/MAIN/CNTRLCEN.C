@@ -20,7 +20,7 @@ static char rcsid[] = "$Id: cntrlcen.c 2.33 1996/06/18 10:54:32 matt Exp $";
 #endif
 
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "error.h"
 #include "mono.h"

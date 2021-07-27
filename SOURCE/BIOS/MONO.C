@@ -346,16 +346,16 @@ void mopen( short n, short row, short col, short width, short height, char * tit
 
 }
 
-#pragma aux mono_present value [eax] modify [bx] = \
-	"mov	ax,1a00h"	\
-	"int	10h"			\	
-	"mov	eax,-1"		\	
-	"cmp	bl,1"			\
-	"je	got_it"		\
-	"cmp	bh,1"			\
-	"je	got_it"		\
-	"xor	eax,eax"		\	
-"got_it:";
+//#pragma aux mono_present value [eax] modify [bx] = \
+//	"mov	ax,1a00h"	
+//	"int	10h"			\	
+//	"mov	eax,-1"		\	
+//	"cmp	bl,1"			\
+//	"je	got_it"		\
+//	"cmp	bh,1"			\
+//	"je	got_it"		\
+//	"xor	eax,eax"		\	
+//"got_it:";
 
 
 int minit()

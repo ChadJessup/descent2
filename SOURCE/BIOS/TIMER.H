@@ -31,7 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 extern void timer_init();
 extern void timer_close();
 extern void timer_set_rate(int count_val);
-extern void timer_set_function( void _far * function );
+extern void timer_set_function( void* _far);
 
 //==========================================================================
 // These functions return the time since the timer was initialized in

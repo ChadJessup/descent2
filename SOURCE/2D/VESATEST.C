@@ -66,7 +66,7 @@ main()
 	printf( "and all this surrounded by a white frame.\n" );
 	printf( "Press any key...\n" );
 
-	getch();
+	_getch();
 
 	CreatePalette();
 
@@ -96,7 +96,7 @@ main()
 	gr_setcolor( 12 );
 	gr_ubox(0,0,799, 599);
 
-	getch();
+	_getch();
 
 	gr_pal_setblock( 0, 256, palette );
 
@@ -115,7 +115,7 @@ main()
 	gr_setcolor( 215 ); gr_ubox(4,4,795, 595);
 	gr_setcolor( 205 ); gr_ubox(5,5,794, 594);
 
-	getch();
+	_getch();
 
 }
 	

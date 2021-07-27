@@ -28,7 +28,7 @@ char gameseq_rcsid[] = "$Id: gameseq.c 2.180 1997/01/27 16:27:02 matt Exp $";
 #include <stdarg.h>
 #include <errno.h>
 #include <time.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "pa_enabl.h"                   //$$POLY_ACC
 #include "inferno.h"

@@ -32,19 +32,19 @@ void main (void)
 	mopen( 3,13,1,37,10, "Mouse" );
 	mopen( 4,13,41,37,10,"Instructions" );
 
-	mprintf( 4, "F1 - turn off buffering.\n" );
-	mprintf( 4, "F2 - turn on ASCII buffering.\n" );
-	mprintf( 4, "F3 - turn on scan code buffering.\n" );
-	mprintf( 4, "F4 - flush keyboard.\n" );
-	mprintf( 4, "F5 - turn repeat off.\n");
-	mprintf( 4, "F6 - turn repeat on.\n");
-	mprintf( 4, "F7 - do an INT 3.\n" );
-	mprintf( 4, "F10 - to display some boxes.\n" );
+	printf( 4, "F1 - turn off buffering.\n" );
+	printf( 4, "F2 - turn on ASCII buffering.\n" );
+	printf( 4, "F3 - turn on scan code buffering.\n" );
+	printf( 4, "F4 - flush keyboard.\n" );
+	printf( 4, "F5 - turn repeat off.\n");
+	printf( 4, "F6 - turn repeat on.\n");
+	printf( 4, "F7 - do an INT 3.\n" );
+	printf( 4, "F10 - to display some boxes.\n" );
 	//mprintf( 4, "Arrows - example unbuffered.\n");
 	//mprintf( 4, "ESC - exit program.\n" );
 
 	if ( (j1=joy_init())==0 )   {
-		mprintf( 2, "Not installed.\n" );
+		printf( 2, "Not installed.\n" );
 	}
 
 

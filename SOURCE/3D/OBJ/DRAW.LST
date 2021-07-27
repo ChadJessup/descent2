@@ -122,7 +122,7 @@ Segment: _TEXT  DWORD USE32  000004eb bytes
  00f6  65 00 68 00                       add     gs:L20[eax],ch
  00fa  00 00                             add     [eax],al
  00fc  00 6a 00                          add     +0H[edx],ch
- 00ff  e8 00 00 00 00                    call    mprintf_
+ 00ff  e8 00 00 00 00                    call    printf_
  0104  83 c4 08                          add     esp,00000008H
  0107  58                                pop     eax
  0108  66 9d                             popf    
@@ -184,7 +184,7 @@ Segment: _TEXT  DWORD USE32  000004eb bytes
  0194  63 6b 00                          arpl    ebp,+0H[ebx]
  0197  68 00 00 00 00    L30             push    offset L29
  019c  6a 00                             push    00000000H
- 019e  e8 00 00 00 00                    call    mprintf_
+ 019e  e8 00 00 00 00                    call    printf_
  01a3  83 c4 08                          add     esp,00000008H
  01a6  58                                pop     eax
  01a7  66 9d                             popf    
@@ -321,7 +321,7 @@ Segment: _TEXT  DWORD USE32  000004eb bytes
  02d9  65 00 68 00                       add     gs:L47[eax],ch
  02dd  00 00                             add     [eax],al
  02df  00 6a 00                          add     +0H[edx],ch
- 02e2  e8 00 00 00 00                    call    mprintf_
+ 02e2  e8 00 00 00 00                    call    printf_
  02e7  83 c4 08                          add     esp,00000008H
  02ea  58                                pop     eax
  02eb  66 9d                             popf    
@@ -396,7 +396,7 @@ Segment: _TEXT  DWORD USE32  000004eb bytes
  03a4  00 68 00                          add     L59[eax],ch
  03a7  00 00                             add     [eax],al
  03a9  00 6a 00                          add     +0H[edx],ch
- 03ac  e8 00 00 00 00                    call    mprintf_
+ 03ac  e8 00 00 00 00                    call    printf_
  03b1  83 c4 08          L61             add     esp,00000008H
  03b4  58                                pop     eax
  03b5  66 9d                             popf    
@@ -476,7 +476,7 @@ Segment: _TEXT  DWORD USE32  000004eb bytes
  0473  65 00 68 00                       add     gs:L75[eax],ch
  0477  00 00                             add     [eax],al
  0479  00 6a 00                          add     +0H[edx],ch
- 047c  e8 00 00 00 00                    call    mprintf_
+ 047c  e8 00 00 00 00                    call    printf_
  0481  83 c4 08                          add     esp,00000008H
  0484  58                                pop     eax
  0485  66 9d                             popf    

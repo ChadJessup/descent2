@@ -6,9 +6,9 @@
 #include <conio.h>
 #include <stdlib.h>
 
-#include "types.h"
+//#include "types.h"
 #include "fix.h"
-#include "graph.h"
+//#include "graph.h"
 
 #define f1_0 0x10000
 #define f0_5 0x8000
@@ -72,7 +72,7 @@ circle_test()
 
 	}
 
-	getch();
+	_getch();
 
 //printf("good:\n");
 	for (i=0,f=0;i<N_POINTS;i++,f+=65536/N_POINTS) {
@@ -88,7 +88,7 @@ circle_test()
 
 	}
 
-	getch();
+	_getch();
 
 	_setvideomode(_DEFAULTMODE);
 }
@@ -244,5 +244,3 @@ main()
 //	quad_sqrt_time();		//timing test
 
 }
-
-ÿ

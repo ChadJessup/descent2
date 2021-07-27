@@ -232,7 +232,7 @@ int songs_haved2_cd()
 {
 	char temp[128],cwd[128];
 	
-	getcwd(cwd, 128);
+	_getcwd(cwd, 128);
 
 	strcpy(temp,CDROM_dir);
 
@@ -241,8 +241,8 @@ int songs_haved2_cd()
 		temp[strlen(temp)-1] = 0;
 	#endif
 
-	if ( !chdir(temp) ) {
-		chdir(cwd);
+	if ( !_chdir(temp) ) {
+		_chdir(cwd);
 		return 1;
 	}
 	
