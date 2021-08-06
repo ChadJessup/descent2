@@ -1046,7 +1046,7 @@ int main(int argc,char **argv)
 	dpmi_init(Inferno_verbose);		// Before anything
 	verbose( "\n" );
 
-	if (!dpmi_lock_region((void near *)descent_critical_error_handler,(char *)chandler_end - (char near *)descent_critical_error_handler))	{
+	if (!dpmi_lock_region((void *)descent_critical_error_handler,(char *)chandler_end - (char *)descent_critical_error_handler))	{
 		Error( "Unable to lock critial error handler" );
 	}
 	if (!dpmi_lock_region(&descent_critical_error,sizeof(int)))	{
@@ -1087,9 +1087,9 @@ int main(int argc,char **argv)
 	 //these adresses and lengths are based on perusing the map file.
 	 //they could always change later with a different compiler or
 	 //different version of the compiler.
-	 dpmi_lock_region ((void near *)SerialHardwareInit,4096);
-	 dpmi_lock_region ((void near *)SerialInit,4096);
-	 dpmi_lock_region ((void near *)StatusCheck,4096);
+	 dpmi_lock_region ((void *)SerialHardwareInit,4096);
+	 dpmi_lock_region ((void *)SerialInit,4096);
+	 dpmi_lock_region ((void *)StatusCheck,4096);
 	 dpmi_lock_region ((ubyte *)&SerialPort,4096);
 	 dpmi_lock_region ((ubyte *)InBuf,4096);
 	 dpmi_lock_region ((ubyte *)StatusBytes,4096);

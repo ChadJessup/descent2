@@ -17,8 +17,14 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 #define _CFILE_H
 
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "pstypes.h"
+#include <string.h>
+#define _FILE_DEFINED
+typedef struct _iobuf
+{
+	void* _Placeholder;
+} FILE;
 
 typedef struct CFILE {
 	FILE 				*file;
@@ -27,10 +33,95 @@ typedef struct CFILE {
 	int				raw_position;
 } CFILE;
 
-//Specify the name of the hogfile.  Returns 1 if hogfile found & had files
-int cfile_init(char *hogname);
+//in case no one installs one
+int default_error_counter = 0;
+char AltHogDir[64];
+char AltHogdir_initialized = 0;
+//ptr to counter of how many critical errors
+int* critical_error_counter_ptr = &default_error_counter;
 
-CFILE * cfopen(char * filename, char * mode);
+
+//Specify the name of the hogfile.  Returns 1 if hogfile found & had files
+//int cfile_init(const char *hogname);
+
+CFILE* cfopen(const char* filename, const char* mode)
+{
+		int length;
+	FILE * fp;
+	CFILE *cfile;
+	
+	if (_stricmp( mode, "rb"))	{
+		Error( "cfiles can only be opened with mode==rb\n" );
+	}
+
+	if (filename[0] != '\x01') {
+		#ifdef MACINTOSH
+		char mac_path[255];
+		
+		macify_dospath(filename, mac_path);
+		fp = cfile_get_filehandle( mac_path, mode);
+		#else
+		fp = cfile_get_filehandle( filename, mode );		// Check for non-hog file first...
+		#endif
+	} else {
+		fp = NULL;		//don't look in dir, only in hogfile
+		filename++;
+	}
+
+	if ( !fp ) {
+		fp = cfile_find_libfile(filename, &length );
+		if ( !fp )
+			return NULL;		// No file found
+		cfile = malloc ( sizeof(CFILE) );
+		if ( cfile == NULL ) {
+			fclose(fp);
+			return NULL;
+		}
+		cfile->file = fp;
+		cfile->size = length;
+		cfile->lib_offset = ftell( fp );
+		cfile->raw_position = 0;
+		return cfile;
+	} else {
+		cfile = malloc ( sizeof(CFILE) );
+		if ( cfile == NULL ) {
+			fclose(fp);
+			return NULL;
+		}
+		cfile->file = fp;
+		cfile->size = _filelength( _fileno(fp) );
+		cfile->lib_offset = 0;
+		cfile->raw_position = 0;
+		return cfile;
+	}
+
+}
+
+FILE* cfile_get_filehandle(char const* filename,  char const* mode)
+{
+	FILE* fp;
+	char temp[128];
+
+	*critical_error_counter_ptr = 0;
+	fp = fopen(filename, mode);
+	if (fp && *critical_error_counter_ptr) {
+		fclose(fp);
+		fp = NULL;
+	}
+	if ((fp == NULL) && (AltHogdir_initialized)) {
+		strcpy_s(temp, AltHogDir);
+		strcat_s(temp, filename);
+		*critical_error_counter_ptr = 0;
+		fp = fopen(temp, mode);
+		if (fp && *critical_error_counter_ptr) {
+			fclose(fp);
+			fp = NULL;
+		}
+	}
+	return fp;
+}
+
+
 int cfilelength( CFILE *fp );							// Returns actual size of file...
 size_t cfread( void * buf, size_t elsize, size_t nelem, CFILE * fp );
 void cfclose( CFILE * cfile );

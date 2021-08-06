@@ -305,7 +305,7 @@ int mem_check_integrity( int block_number )
 		fprintf( stderr, "\nMEM_OVERWRITE: Memory after the end of allocated block overwritten.\n" );
 		PrintInfo( block_number );
 		fprintf( stderr, "\t%d/%d check bytes were overwritten.\n", ErrorCount, CHECKSIZE );
-		Int3();
+		//Int3();
 	}
 
 	return ErrorCount;
@@ -337,7 +337,7 @@ void mem_free( void * buffer )
 	{
 		fprintf( stderr, "\nMEM_FREE_NULL: An attempt was made to free the null pointer.\n" );
 		Warning( "MEM: Freeing the NULL pointer!" );
-		Int3();
+		//Int3();
 		return;
 	}
 
@@ -347,7 +347,7 @@ void mem_free( void * buffer )
 	{
 		fprintf( stderr, "\nMEM_FREE_NOMALLOC: An attempt was made to free a ptr that wasn't\nallocated with mem.h included.\n" );
 		Warning( "MEM: Freeing a non-malloced pointer!" );
-		Int3();
+		//Int3();
 		return;
 	}
 	

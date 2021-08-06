@@ -7,7 +7,7 @@ IN USING, DISPLAYING,  AND CREATING DERIVATIVE WORKS THEREOF, SO LONG AS
 SUCH USE, DISPLAY OR CREATION IS FOR NON-COMMERCIAL, ROYALTY OR REVENUE
 FREE PURPOSES.  IN NO EVENT SHALL THE END-USER USE THE COMPUTER CODE
 CONTAINED HEREIN FOR REVENUE-BEARING PURPOSES.  THE END-USER UNDERSTANDS
-AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.  
+AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
@@ -58,11 +58,11 @@ static char rcsid[] = "$Id: piggy.c 2.102 1996/12/04 18:28:09 matt Exp $";
 #include "findfile.h"
 
 #ifndef MACINTOSH
-	#include "unarj.h"
+//#include "unarj.h"
 #else
-	#include <Strings.h>		// MacOS Toolbox header
-	#include <Files.h>
-	#include <unistd.h>
+#include <Strings.h>		// MacOS Toolbox header
+#include <Files.h>
+#include <unistd.h>
 #endif
 
 //#define NO_DUMP_SOUNDS        1               //if set, dump bitmaps but not sounds
@@ -72,23 +72,23 @@ static char rcsid[] = "$Id: piggy.c 2.102 1996/12/04 18:28:09 matt Exp $";
 
 
 #ifdef SHAREWARE
-	#define DEFAULT_HAMFILE         "d2demo.ham"
-	#define DEFAULT_PIGFILE         DEFAULT_PIGFILE_SHAREWARE
-	#define DEFAULT_SNDFILE			"descent2.s11"
+#define DEFAULT_HAMFILE         "d2demo.ham"
+#define DEFAULT_PIGFILE         DEFAULT_PIGFILE_SHAREWARE
+#define DEFAULT_SNDFILE			"descent2.s11"
 #else
-	#define DEFAULT_HAMFILE         "descent2.ham"
-	#define DEFAULT_PIGFILE         DEFAULT_PIGFILE_REGISTERED
-	#define DEFAULT_SNDFILE	 		((digi_sample_rate==SAMPLE_RATE_22K)?"descent2.s22":"descent2.s11")
+#define DEFAULT_HAMFILE         "descent2.ham"
+#define DEFAULT_PIGFILE         DEFAULT_PIGFILE_REGISTERED
+#define DEFAULT_SNDFILE	 		0//((digi_sample_rate==SAMPLE_RATE_22K)?"descent2.s22":"descent2.s11")
 #endif	// end of ifdef SHAREWARE
 
-ubyte *BitmapBits = NULL;
-ubyte *SoundBits = NULL;
+ubyte* BitmapBits = NULL;
+ubyte* SoundBits = NULL;
 
-typedef struct BitmapFile       {
+typedef struct BitmapFile {
 	char                    name[15];
 } BitmapFile;
 
-typedef struct SoundFile        {
+typedef struct SoundFile {
 	char                    name[15];
 } SoundFile;
 
@@ -103,19 +103,19 @@ int SoundOffset[MAX_SOUND_FILES];
 grs_bitmap GameBitmaps[MAX_BITMAP_FILES];
 
 alias alias_list[MAX_ALIASES];
-int Num_aliases=0;
+int Num_aliases = 0;
 
 int Must_write_hamfile = 0;
 int Num_bitmap_files_new = 0;
 int Num_sound_files_new = 0;
-BitmapFile AllBitmaps[ MAX_BITMAP_FILES ];
-static SoundFile AllSounds[ MAX_SOUND_FILES ];
+BitmapFile AllBitmaps[MAX_BITMAP_FILES];
+static SoundFile AllSounds[MAX_SOUND_FILES];
 
 int piggy_low_memory = 0;
 
 int Piggy_bitmap_cache_size = 0;
 int Piggy_bitmap_cache_next = 0;
-ubyte * Piggy_bitmap_cache_data = NULL;
+ubyte* Piggy_bitmap_cache_data = NULL;
 static int GameBitmapOffset[MAX_BITMAP_FILES];
 static ubyte GameBitmapFlags[MAX_BITMAP_FILES];
 ushort GameBitmapXlat[MAX_BITMAP_FILES];
@@ -160,19 +160,19 @@ typedef struct DiskSoundHeader {
 ubyte BigPig = 0;
 
 #ifdef MACINTOSH
-	extern short 	cd_VRefNum;
-	extern void		ConcatPStr(StringPtr dst, StringPtr src);
-	extern int		ConvertPToCStr(StringPtr inPStr, char* outCStrBuf);
-	extern int		ConvertCToPStr(char* inCStr, StringPtr outPStrBuf);
+extern short 	cd_VRefNum;
+extern void		ConcatPStr(StringPtr dst, StringPtr src);
+extern int		ConvertPToCStr(StringPtr inPStr, char* outCStrBuf);
+extern int		ConvertCToPStr(char* inCStr, StringPtr outPStrBuf);
 #endif
 
 #ifdef EDITOR
-void swap_0_255(grs_bitmap *bmp)
+void swap_0_255(grs_bitmap* bmp)
 {
 	int i;
 
 	for (i = 0; i < bmp->bm_h * bmp->bm_w; i++) {
-		if(bmp->bm_data[i] == 0)
+		if (bmp->bm_data[i] == 0)
 			bmp->bm_data[i] = 255;
 		else if (bmp->bm_data[i] == 255)
 			bmp->bm_data[i] = 0;
@@ -180,26 +180,28 @@ void swap_0_255(grs_bitmap *bmp)
 }
 #endif
 
-bitmap_index piggy_register_bitmap( grs_bitmap * bmp, char * name, int in_file )
+bitmap_index piggy_register_bitmap(grs_bitmap* bmp, char* name, int in_file)
 {
 	bitmap_index temp;
-	Assert( Num_bitmap_files < MAX_BITMAP_FILES );
+	Assert(Num_bitmap_files < MAX_BITMAP_FILES);
 
 	temp.index = Num_bitmap_files;
 
-	if (!in_file)   {
+	if (!in_file) {
 #ifdef EDITOR
-		if ( FindArg("-macdata") )
-			swap_0_255( bmp );
+		if (FindArg("-macdata"))
+			swap_0_255(bmp);
 #endif
-		if ( !BigPig )  gr_bitmap_rle_compress( bmp );
+		if (!BigPig) {
+			//gr_bitmap_rle_compress( bmp );
+		}
 		Num_bitmap_files_new++;
 	}
 
-	strncpy( AllBitmaps[Num_bitmap_files].name, name, 12 );
-	hashtable_insert( &AllBitmapsNames, AllBitmaps[Num_bitmap_files].name, Num_bitmap_files );
+	strncpy(AllBitmaps[Num_bitmap_files].name, name, 12);
+	// hashtable_insert( &AllBitmapsNames, AllBitmaps[Num_bitmap_files].name, Num_bitmap_files );
 	GameBitmaps[Num_bitmap_files] = *bmp;
-	if ( !in_file ) {
+	if (!in_file) {
 		GameBitmapOffset[Num_bitmap_files] = 0;
 		GameBitmapFlags[Num_bitmap_files] = bmp->bm_flags;
 	}
@@ -208,21 +210,21 @@ bitmap_index piggy_register_bitmap( grs_bitmap * bmp, char * name, int in_file )
 	return temp;
 }
 
-int piggy_register_sound( digi_sound * snd, char * name, int in_file )
+int piggy_register_sound(digi_sound* snd, char* name, int in_file)
 {
 	int i;
 
-	Assert( Num_sound_files < MAX_SOUND_FILES );
+	Assert(Num_sound_files < MAX_SOUND_FILES);
 
-	strncpy( AllSounds[Num_sound_files].name, name, 12 );
-	hashtable_insert( &AllDigiSndNames, AllSounds[Num_sound_files].name, Num_sound_files );
+	strncpy(AllSounds[Num_sound_files].name, name, 12);
+	//hashtable_insert( &AllDigiSndNames, AllSounds[Num_sound_files].name, Num_sound_files );
 	GameSounds[Num_sound_files] = *snd;
-	if ( !in_file ) {
-		SoundOffset[Num_sound_files] = 0;       
+	if (!in_file) {
+		SoundOffset[Num_sound_files] = 0;
 	}
 
 	i = Num_sound_files;
-   
+
 	if (!in_file)
 		Num_sound_files_new++;
 
@@ -230,56 +232,56 @@ int piggy_register_sound( digi_sound * snd, char * name, int in_file )
 	return i;
 }
 
-bitmap_index piggy_find_bitmap( char * name )   
+bitmap_index piggy_find_bitmap(char* name)
 {
 	bitmap_index bmp;
 	int i;
-	char *t;
+	char* t;
 
 	bmp.index = 0;
 
-	if ((t=strchr(name,'#'))!=NULL)
-		*t=0;
+	if ((t = strchr(name, '#')) != NULL)
+		*t = 0;
 
-	for (i=0;i<Num_aliases;i++)
-		if (stricmp(name,alias_list[i].alias_name)==0) {
+	for (i = 0; i < Num_aliases; i++)
+		if (_stricmp(name, alias_list[i].alias_name) == 0) {
 			if (t) {                //extra stuff for ABMs
 				static char temp[FILENAME_LEN];
-				_splitpath(alias_list[i].file_name, NULL, NULL, temp, NULL );
+				_splitpath(alias_list[i].file_name, NULL, NULL, temp, NULL);
 				name = temp;
-				strcat(name,"#");
-				strcat(name,t+1);
+				strcat(name, "#");
+				strcat(name, t + 1);
 			}
 			else
-				name=alias_list[i].file_name; 
+				name = alias_list[i].file_name;
 			break;
 		}
 
 	if (t)
 		*t = '#';
 
-	i = hashtable_search( &AllBitmapsNames, name );
-	Assert( i != 0 );
-	if ( i < 0 )
+	//	i = hashtable_search( &AllBitmapsNames, name );
+	Assert(i != 0);
+	if (i < 0)
 		return bmp;
 
 	bmp.index = i;
 	return bmp;
 }
 
-int piggy_find_sound( char * name )     
+int piggy_find_sound(char* name)
 {
 	int i;
 
-	i = hashtable_search( &AllDigiSndNames, name );
+	//	i = hashtable_search( &AllDigiSndNames, name );
 
-	if ( i < 0 )
-		return 255;
+	//	if ( i < 0 )
+	//		return 255;
 
-	return i;
+	return 0;
 }
 
-CFILE * Piggy_fp = NULL;
+CFILE* Piggy_fp = NULL;
 
 #define FILENAME_LEN 13
 
@@ -287,35 +289,35 @@ char Current_pigfile[FILENAME_LEN] = "";
 
 void piggy_close_file()
 {
-	if ( Piggy_fp ) {
-		cfclose( Piggy_fp );
-		Piggy_fp        = NULL;
+	if (Piggy_fp) {
+		cfclose(Piggy_fp);
+		Piggy_fp = NULL;
 		Current_pigfile[0] = 0;
 	}
 }
 
-int Pigfile_initialized=0;
+int Pigfile_initialized = 0;
 
 #define PIGFILE_ID              'GIPP'          //PPIG
 #define PIGFILE_VERSION         2
 
-extern char CDROM_dir[];
+char CDROM_dir[];
 
-int request_cd(void);
+//int request_cd(void);
 
 
 #ifdef MACINTOSH
 
 //copies a pigfile from the CD to the current dir
 //retuns file handle of new pig
-CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
+CFILE* copy_pigfile_from_cd(char* filename)		// MACINTOSH VERSION
 {
 	// C Stuff
 	char			sourcePathAndFileCStr[255] = "";
-	char			destPathAndFileCStr[255]	= "";
+	char			destPathAndFileCStr[255] = "";
 	FILEFINDSTRUCT	find;
-	FILE*			sourceFile	= NULL;
-	FILE*			destFile	= NULL;
+	FILE* sourceFile = NULL;
+	FILE* destFile = NULL;
 	const int		BUF_SIZE = 4096;
 	ubyte 			buf[BUF_SIZE];
 
@@ -329,19 +331,19 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 	char			oldDirCStr[255] = "";
 
 	getcwd(oldDirCStr, 255);
-	
+
 	show_boxed_message("Copying bitmap data from CD...");
-	gr_palette_load(gr_palette);    //I don't think this line is really needed
+	// gr_palette_load(gr_palette);    //I don't think this line is really needed
 
 	chdir(":Data");
 	//First, delete all PIG files currently in the directory
-	if( !FileFindFirst( "*.pig", &find ) )
+	if (!FileFindFirst("*.pig", &find))
 	{
 		do
 		{
 			remove(find.name);
-		} while( !FileFindNext( &find ) );
-		
+		} while (!FileFindNext(&find));
+
 		FileFindClose();
 	}
 	chdir(oldDirCStr);
@@ -358,7 +360,7 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 	strupr(filename);
 	strcpy(sourcePathAndFileCStr, "Descent II:Data:");
 	strcat(sourcePathAndFileCStr, filename);
-	
+
 	// make the destination path "<default directory>:Data:filename.pig"
 //MWA	ConcatPStr(destPathAndFilePStr, "\p:Data:");
 //MWA	ConcatPStr(destPathAndFilePStr, pigfileNamePStr);
@@ -372,59 +374,59 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 	strcpy(destPathAndFilePStr, destPathAndFileCStr);
 	c2pstr(sourcePathAndFilePStr);
 	c2pstr(destPathAndFilePStr);
-	
+
 	do {
 		// Open the source file
-		sourceFile = fopen(sourcePathAndFileCStr,"rb");
+		sourceFile = fopen(sourcePathAndFileCStr, "rb");
 
 		if (!sourceFile) {
 
 			if (request_cd() == -1)
-				Error("Cannot load file <%s> from CD",filename);
+				Error("Cannot load file <%s> from CD", filename);
 		}
 
 	} while (!sourceFile);
 
 
 	// Get the time stamp from the source file
-	theSourcePigHFSParams.fileParam.ioCompletion 	= nil;
-	theSourcePigHFSParams.fileParam.ioNamePtr		= sourcePathAndFilePStr;
-	theSourcePigHFSParams.fileParam.ioVRefNum		= cd_VRefNum;
-	theSourcePigHFSParams.fileParam.ioFDirIndex	= 0;
-	theSourcePigHFSParams.fileParam.ioDirID		= 0;
-	
+	theSourcePigHFSParams.fileParam.ioCompletion = nil;
+	theSourcePigHFSParams.fileParam.ioNamePtr = sourcePathAndFilePStr;
+	theSourcePigHFSParams.fileParam.ioVRefNum = cd_VRefNum;
+	theSourcePigHFSParams.fileParam.ioFDirIndex = 0;
+	theSourcePigHFSParams.fileParam.ioDirID = 0;
+
 	theErr = PBHGetFInfo(&theSourcePigHFSParams, false);
 	if (theErr != noErr)
 	{
 		// Error getting file time stamp!! Why? JTS
 		Error("Can't get old file time stamp: <%s>\n", sourcePathAndFileCStr);
 	}
-	
+
 	// Copy the file over
 	// C Stuff......
-	
+
 	// Open the destination file
-	destFile = fopen(destPathAndFileCStr,"wb");
+	destFile = fopen(destPathAndFileCStr, "wb");
 	if (!destFile)
 	{
 		Error("Cannot create file: <%s>\n", destPathAndFileCStr);
 	}
-	
+
 	// Copy bytes until the end of the source file
 	while (!feof(sourceFile))
 	{
 		int bytes_read;
 		int x;
 
-		bytes_read = fread(buf,1,BUF_SIZE,sourceFile);
+		bytes_read = fread(buf, 1, BUF_SIZE, sourceFile);
 		if (ferror(sourceFile))
 			Error("Cannot read from file <%s>: %s", sourcePathAndFileCStr, strerror(errno));
 
-// Assert is bogus		Assert(bytes_read == BUF_SIZE || feof(sourceFile));
+		// Assert is bogus		Assert(bytes_read == BUF_SIZE || feof(sourceFile));
 
-		fwrite(buf,1,bytes_read,destFile);
+		fwrite(buf, 1, bytes_read, destFile);
 		if (ferror(destFile))
-			Error("Cannot write to file <%s>: %s",destPathAndFileCStr, strerror(errno));
+			Error("Cannot write to file <%s>: %s", destPathAndFileCStr, strerror(errno));
 	}
 
 	// close the source/dest files
@@ -434,11 +436,11 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 		Error("Error closing file <%s>: %s", destPathAndFileCStr, strerror(errno));
 
 	// Get the current hfs data for the new file
-	theDestPigHFSParams.fileParam.ioCompletion 	= nil;
-	theDestPigHFSParams.fileParam.ioNamePtr		= destPathAndFilePStr;
-	theDestPigHFSParams.fileParam.ioVRefNum		= 0;
-	theDestPigHFSParams.fileParam.ioFDirIndex	= 0;
-	theDestPigHFSParams.fileParam.ioDirID		= 0;
+	theDestPigHFSParams.fileParam.ioCompletion = nil;
+	theDestPigHFSParams.fileParam.ioNamePtr = destPathAndFilePStr;
+	theDestPigHFSParams.fileParam.ioVRefNum = 0;
+	theDestPigHFSParams.fileParam.ioFDirIndex = 0;
+	theDestPigHFSParams.fileParam.ioDirID = 0;
 	theErr = PBHGetFInfo(&theDestPigHFSParams, false);
 	if ((theErr != noErr) || (theDestPigHFSParams.fileParam.ioResult != noErr))
 	{
@@ -447,17 +449,17 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 	}
 
 	// Reset this data !!!!! or else the relative pathname won't work, could use just filename instead but, oh well.
-	theDestPigHFSParams.fileParam.ioNamePtr		= destPathAndFilePStr;
-	theDestPigHFSParams.fileParam.ioVRefNum		= 0;
-	theDestPigHFSParams.fileParam.ioFDirIndex	= 0;
-	theDestPigHFSParams.fileParam.ioDirID		= 0;
+	theDestPigHFSParams.fileParam.ioNamePtr = destPathAndFilePStr;
+	theDestPigHFSParams.fileParam.ioVRefNum = 0;
+	theDestPigHFSParams.fileParam.ioFDirIndex = 0;
+	theDestPigHFSParams.fileParam.ioDirID = 0;
 
 	// Copy the time stamp from the source file info
-	theDestPigHFSParams.fileParam.ioFlCrDat	= theSourcePigHFSParams.fileParam.ioFlCrDat;
-	theDestPigHFSParams.fileParam.ioFlMdDat	= theSourcePigHFSParams.fileParam.ioFlMdDat;
+	theDestPigHFSParams.fileParam.ioFlCrDat = theSourcePigHFSParams.fileParam.ioFlCrDat;
+	theDestPigHFSParams.fileParam.ioFlMdDat = theSourcePigHFSParams.fileParam.ioFlMdDat;
 	theDestPigHFSParams.fileParam.ioFlFndrInfo.fdType = 'PGGY';
 	theDestPigHFSParams.fileParam.ioFlFndrInfo.fdCreator = 'DCT2';
-	
+
 	// Set the dest file's time stamp to the source file's time stamp values
 	theErr = PBHSetFInfo(&theDestPigHFSParams, false);
 
@@ -475,45 +477,45 @@ CFILE *copy_pigfile_from_cd(char *filename)		// MACINTOSH VERSION
 
 //copies a pigfile from the CD to the current dir
 //retuns file handle of new pig
-CFILE *copy_pigfile_from_cd(char *filename)
+CFILE* copy_pigfile_from_cd(char* filename)
 {
 	char name[80];
 	FILEFINDSTRUCT find;
 	int ret;
 
-	show_boxed_message("Copying bitmap data from CD...");
-	gr_palette_load(gr_palette);    //I don't think this line is really needed
+//	show_boxed_message("Copying bitmap data from CD...");
+	//gr_palette_load(gr_palette);    //I don't think this line is really needed
 
 	//First, delete all PIG files currently in the directory
 
-	if( !FileFindFirst( "*.pig", &find ) ) {
-		do      {
-			remove(find.name);
-		} while( !FileFindNext( &find ) );
-		FileFindClose();
-	}
+//	if (!FileFindFirst("*.pig", &find)) {
+//		do {
+//			remove(find.name);
+//		} while (!FileFindNext(&find));
+//		FileFindClose();
+//	}
 
 	//Now, copy over new pig
 
-	songs_stop_redbook();           //so we can read off the cd
+	// songs_stop_redbook();           //so we can read off the cd
 
 	//new code to unarj file
-	strcpy(name,CDROM_dir);
-	strcat(name,"descent2.sow");
+	//strcpy(name, CDROM_dir);
+	strcat(name, "descent2.sow");
 
 	do {
-		ret = unarj_specific_file(name,filename,filename);
+		ret = 0;// unarj_specific_file(name, filename, filename);
 
 		if (ret != EXIT_SUCCESS) {
 
 			//delete file, so we don't leave partial file
 			remove(filename);
 
-			#ifndef MACINTOSH
-			if (request_cd() == -1)
-			#endif
+#ifndef MACINTOSH
+			if (0)//request_cd() == -1)
+#endif
 				//NOTE LINK TO ABOVE IF
-				Error("Cannot load file <%s> from CD",filename);
+				Error("Cannot load file <%s> from CD", filename);
 		}
 
 	} while (ret != EXIT_SUCCESS);
@@ -525,7 +527,7 @@ CFILE *copy_pigfile_from_cd(char *filename)
 
 //initialize a pigfile, reading headers
 //returns the size of all the bitmap data
-void piggy_init_pigfile(char *filename)
+void piggy_init_pigfile(char* filename)
 {
 	int i;
 	char temp_name[16];
@@ -533,42 +535,42 @@ void piggy_init_pigfile(char *filename)
 	grs_bitmap temp_bitmap;
 	DiskBitmapHeader bmh;
 	int header_size, N_bitmaps, data_size, data_start;
-	#ifdef MACINTOSH
+#ifdef MACINTOSH
 	char name[255];		// filename + path for the mac
-	#endif
+#endif
 
 	piggy_close_file();             //close old pig if still open
 
-	#ifdef SHAREWARE                //rename pigfile for shareware
-	if (stricmp(filename,DEFAULT_PIGFILE_REGISTERED)==0)
+#ifdef SHAREWARE                //rename pigfile for shareware
+	if (stricmp(filename, DEFAULT_PIGFILE_REGISTERED) == 0)
 		filename = DEFAULT_PIGFILE_SHAREWARE;
-	#endif
+#endif
 
-	#ifndef MACINTOSH
-		Piggy_fp = cfopen( filename, "rb" );
-	#else
-		sprintf(name, ":Data:%s", filename);
-		Piggy_fp = cfopen( name, "rb" );
-	
-		#ifdef SHAREWARE	// if we are in the shareware version, we must have the pig by now.
-			if (Piggy_fp == NULL)
-			{
-				Error("Cannot load required file <%s>",name);
-			}
-		#endif	// end of if def shareware
-	
-	#endif
+#ifndef MACINTOSH
+	Piggy_fp = cfopen(filename, "rb");
+#else
+	sprintf(name, ":Data:%s", filename);
+	Piggy_fp = cfopen(name, "rb");
+
+#ifdef SHAREWARE	// if we are in the shareware version, we must have the pig by now.
+	if (Piggy_fp == NULL)
+	{
+		Error("Cannot load required file <%s>", name);
+	}
+#endif	// end of if def shareware
+
+#endif
 
 	if (!Piggy_fp) {
-		#ifdef EDITOR
-			return;         //if editor, ok to not have pig, because we'll build one
-		#else
-			Piggy_fp = copy_pigfile_from_cd(filename);
-		#endif
+#ifdef EDITOR
+		return;         //if editor, ok to not have pig, because we'll build one
+#else
+		Piggy_fp = copy_pigfile_from_cd(filename);
+#endif
 	}
 
 	if (Piggy_fp) {                         //make sure pig is valid type file & is up-to-date
-		int pig_id,pig_version;
+		int pig_id, pig_version;
 
 		pig_id = cfile_read_int(Piggy_fp);
 		pig_version = cfile_read_int(Piggy_fp);
@@ -580,18 +582,18 @@ void piggy_init_pigfile(char *filename)
 
 	if (!Piggy_fp) {
 
-		#ifdef EDITOR
-			return;         //if editor, ok to not have pig, because we'll build one
-		#else
-			Error("Cannot load required file <%s>",filename);
-		#endif
+#ifdef EDITOR
+		return;         //if editor, ok to not have pig, because we'll build one
+#else
+		Error("Cannot load required file <%s>", filename);
+#endif
 	}
 
-	strncpy(Current_pigfile,filename,sizeof(Current_pigfile));
+	strncpy(Current_pigfile, filename, sizeof(Current_pigfile));
 
 	N_bitmaps = cfile_read_int(Piggy_fp);
 
-	header_size = N_bitmaps*sizeof(DiskBitmapHeader);
+	header_size = N_bitmaps * sizeof(DiskBitmapHeader);
 
 	data_start = header_size + cftell(Piggy_fp);
 
@@ -599,9 +601,9 @@ void piggy_init_pigfile(char *filename)
 
 	Num_bitmap_files = 1;
 
-	for (i=0; i<N_bitmaps; i++ )    {
+	for (i = 0; i < N_bitmaps; i++) {
 #ifndef MACINTOSH
-		cfread( &bmh, sizeof(DiskBitmapHeader), 1, Piggy_fp );
+		cfread(&bmh, sizeof(DiskBitmapHeader), 1, Piggy_fp);
 #else
 		cfread(bmh.name, 8, 1, Piggy_fp);
 		bmh.dflags = cfile_read_byte(Piggy_fp);
@@ -612,62 +614,62 @@ void piggy_init_pigfile(char *filename)
 		bmh.avg_color = cfile_read_byte(Piggy_fp);
 		bmh.offset = cfile_read_int(Piggy_fp);
 #endif
-		memcpy( temp_name_read, bmh.name, 8 );
+		memcpy(temp_name_read, bmh.name, 8);
 		temp_name_read[8] = 0;
-		if ( bmh.dflags & DBM_FLAG_ABM )        
-			sprintf( temp_name, "%s#%d", temp_name_read, bmh.dflags & 63 );
+		if (bmh.dflags & DBM_FLAG_ABM)
+			sprintf(temp_name, "%s#%d", temp_name_read, bmh.dflags & 63);
 		else
-			strcpy( temp_name, temp_name_read );
-		memset( &temp_bitmap, 0, sizeof(grs_bitmap) );
-		temp_bitmap.bm_w = temp_bitmap.bm_rowsize = bmh.width + ((short) (bmh.wh_extra&0x0f)<<8);
-		temp_bitmap.bm_h = bmh.height + ((short) (bmh.wh_extra&0xf0)<<4);
+			strcpy(temp_name, temp_name_read);
+		memset(&temp_bitmap, 0, sizeof(grs_bitmap));
+		temp_bitmap.bm_w = temp_bitmap.bm_rowsize = bmh.width + ((short)(bmh.wh_extra & 0x0f) << 8);
+		temp_bitmap.bm_h = bmh.height + ((short)(bmh.wh_extra & 0xf0) << 4);
 		temp_bitmap.bm_flags = BM_FLAG_PAGED_OUT;
 		temp_bitmap.avg_color = bmh.avg_color;
 		temp_bitmap.bm_data = Piggy_bitmap_cache_data;
 
-		GameBitmapFlags[i+1] = 0;
-		if ( bmh.flags & BM_FLAG_TRANSPARENT ) GameBitmapFlags[i+1] |= BM_FLAG_TRANSPARENT;
-		if ( bmh.flags & BM_FLAG_SUPER_TRANSPARENT ) GameBitmapFlags[i+1] |= BM_FLAG_SUPER_TRANSPARENT;
-		if ( bmh.flags & BM_FLAG_NO_LIGHTING ) GameBitmapFlags[i+1] |= BM_FLAG_NO_LIGHTING;
-		if ( bmh.flags & BM_FLAG_RLE ) GameBitmapFlags[i+1] |= BM_FLAG_RLE;
-		if ( bmh.flags & BM_FLAG_RLE_BIG ) GameBitmapFlags[i+1] |= BM_FLAG_RLE_BIG;
+		GameBitmapFlags[i + 1] = 0;
+		if (bmh.flags & BM_FLAG_TRANSPARENT) GameBitmapFlags[i + 1] |= BM_FLAG_TRANSPARENT;
+		if (bmh.flags & BM_FLAG_SUPER_TRANSPARENT) GameBitmapFlags[i + 1] |= BM_FLAG_SUPER_TRANSPARENT;
+		if (bmh.flags & BM_FLAG_NO_LIGHTING) GameBitmapFlags[i + 1] |= BM_FLAG_NO_LIGHTING;
+		if (bmh.flags & BM_FLAG_RLE) GameBitmapFlags[i + 1] |= BM_FLAG_RLE;
+		if (bmh.flags & BM_FLAG_RLE_BIG) GameBitmapFlags[i + 1] |= BM_FLAG_RLE_BIG;
 
-		GameBitmapOffset[i+1] = bmh.offset + data_start;
-		Assert( (i+1) == Num_bitmap_files );
-		piggy_register_bitmap( &temp_bitmap, temp_name, 1 );
+		GameBitmapOffset[i + 1] = bmh.offset + data_start;
+		Assert((i + 1) == Num_bitmap_files);
+		piggy_register_bitmap(&temp_bitmap, temp_name, 1);
 	}
 
 #ifdef EDITOR
-	Piggy_bitmap_cache_size = data_size + (data_size/10);   //extra mem for new bitmaps
-	Assert( Piggy_bitmap_cache_size > 0 );
+	Piggy_bitmap_cache_size = data_size + (data_size / 10);   //extra mem for new bitmaps
+	Assert(Piggy_bitmap_cache_size > 0);
 #else
 	Piggy_bitmap_cache_size = PIGGY_BUFFER_SIZE;
-	#ifdef MACINTOSH
+#ifdef MACINTOSH
 	if (piggy_low_memory)
 		Piggy_bitmap_cache_size = PIGGY_SMALL_BUFFER_SIZE;
-	#endif
 #endif
-	BitmapBits = malloc( Piggy_bitmap_cache_size );
-	if ( BitmapBits == NULL )
-		Error( "Not enough memory to load bitmaps\n" );
-	Piggy_bitmap_cache_data = BitmapBits;   
+#endif
+	BitmapBits = malloc(Piggy_bitmap_cache_size);
+	if (BitmapBits == NULL)
+		Error("Not enough memory to load bitmaps\n");
+	Piggy_bitmap_cache_data = BitmapBits;
 	Piggy_bitmap_cache_next = 0;
-	
-	#if defined(MACINTOSH) && defined(SHAREWARE)
-//	load_exit_models();
-	#endif
 
-	Pigfile_initialized=1;  
+#if defined(MACINTOSH) && defined(SHAREWARE)
+	//	load_exit_models();
+#endif
+
+	Pigfile_initialized = 1;
 }
 
 #define FILENAME_LEN 13
 #define MAX_BITMAPS_PER_BRUSH 30
 
-extern int compute_average_pixel(grs_bitmap *new);
+extern int compute_average_pixel(grs_bitmap* new);
 
 //reads in a new pigfile (for new palette)
 //returns the size of all the bitmap data
-void piggy_new_pigfile(char *pigname)
+void piggy_new_pigfile(char* pigname)
 {
 	int i;
 	char temp_name[16];
@@ -676,16 +678,16 @@ void piggy_new_pigfile(char *pigname)
 	DiskBitmapHeader bmh;
 	int header_size, N_bitmaps, data_size, data_start;
 	int must_rewrite_pig = 0;
-	#ifdef MACINTOSH
+#ifdef MACINTOSH
 	char name[255];
-	#endif
+#endif
 
-	#ifdef SHAREWARE                //rename pigfile for shareware
-	if (stricmp(pigname,DEFAULT_PIGFILE_REGISTERED)==0)
+#ifdef SHAREWARE                //rename pigfile for shareware
+	if (stricmp(pigname, DEFAULT_PIGFILE_REGISTERED) == 0)
 		pigname = DEFAULT_PIGFILE_SHAREWARE;
-	#endif
+#endif
 
-	if (strnicmp(Current_pigfile,pigname,sizeof(Current_pigfile))==0)
+	if (_strnicmp(Current_pigfile, pigname, sizeof(Current_pigfile)) == 0)
 		return;         //already have correct pig
 
 	if (!Pigfile_initialized) {                     //have we ever opened a pigfile?
@@ -697,29 +699,29 @@ void piggy_new_pigfile(char *pigname)
 
 	Piggy_bitmap_cache_next = 0;            //free up cache
 
-	strncpy(Current_pigfile,pigname,sizeof(Current_pigfile));
+	strncpy(Current_pigfile, pigname, sizeof(Current_pigfile));
 
-	#ifndef MACINTOSH
-		Piggy_fp = cfopen( pigname, "rb" );
-	#else
-		sprintf(name, ":Data:%s", pigname);
-		Piggy_fp = cfopen( name, "rb" );
+#ifndef MACINTOSH
+	Piggy_fp = cfopen(pigname, "rb");
+#else
+	sprintf(name, ":Data:%s", pigname);
+	Piggy_fp = cfopen(name, "rb");
 
-		#ifdef SHAREWARE	// if we are in the shareware version, we must have the pig by now.
-			if (Piggy_fp == NULL)
-			{
-				Error("Cannot load required file <%s>",name);
-			}
-		#endif	// end of if def shareware
-	#endif
+#ifdef SHAREWARE	// if we are in the shareware version, we must have the pig by now.
+	if (Piggy_fp == NULL)
+	{
+		Error("Cannot load required file <%s>", name);
+	}
+#endif	// end of if def shareware
+#endif
 
-	#ifndef EDITOR
+#ifndef EDITOR
 	if (!Piggy_fp)
 		Piggy_fp = copy_pigfile_from_cd(pigname);
-	#endif
+#endif
 
 	if (Piggy_fp) {                         //make sure pig is valid type file & is up-to-date
-		int pig_id,pig_version;
+		int pig_id, pig_version;
 
 		pig_id = cfile_read_int(Piggy_fp);
 		pig_version = cfile_read_int(Piggy_fp);
@@ -729,23 +731,23 @@ void piggy_new_pigfile(char *pigname)
 		}
 	}
 
-	#ifndef EDITOR
-	if (!Piggy_fp) Error ("Piggy_fp not defined in piggy_new_pigfile.");
-	#endif
+#ifndef EDITOR
+	if (!Piggy_fp) Error("Piggy_fp not defined in piggy_new_pigfile.");
+#endif
 
 	if (Piggy_fp) {
 
 		N_bitmaps = cfile_read_int(Piggy_fp);
-	
-		header_size = N_bitmaps*sizeof(DiskBitmapHeader);
-	
+
+		header_size = N_bitmaps * sizeof(DiskBitmapHeader);
+
 		data_start = header_size + cftell(Piggy_fp);
 
 		data_size = cfilelength(Piggy_fp) - data_start;
-	
-		for (i=1; i<=N_bitmaps; i++ )   {
+
+		for (i = 1; i <= N_bitmaps; i++) {
 #ifndef MACINTOSH       
-			cfread( &bmh, sizeof(DiskBitmapHeader), 1, Piggy_fp );
+			cfread(&bmh, sizeof(DiskBitmapHeader), 1, Piggy_fp);
 #else
 			cfread(bmh.name, 8, 1, Piggy_fp);
 			bmh.dflags = cfile_read_byte(Piggy_fp);
@@ -756,172 +758,172 @@ void piggy_new_pigfile(char *pigname)
 			bmh.avg_color = cfile_read_byte(Piggy_fp);
 			bmh.offset = cfile_read_int(Piggy_fp);
 #endif
-			memcpy( temp_name_read, bmh.name, 8 );
+			memcpy(temp_name_read, bmh.name, 8);
 			temp_name_read[8] = 0;
-	
-			if ( bmh.dflags & DBM_FLAG_ABM )        
-				sprintf( temp_name, "%s#%d", temp_name_read, bmh.dflags & 63 );
-			else
-				strcpy( temp_name, temp_name_read );
-	
-			//Make sure name matches
-			if (strcmp(temp_name,AllBitmaps[i].name)) {
-				//Int3();       //this pig is out of date.  Delete it
-				must_rewrite_pig=1;
-			}
-	
-			strcpy(AllBitmaps[i].name,temp_name);
 
-			memset( &temp_bitmap, 0, sizeof(grs_bitmap) );
-	
-			temp_bitmap.bm_w = temp_bitmap.bm_rowsize = bmh.width + ((short) (bmh.wh_extra&0x0f)<<8);
-			temp_bitmap.bm_h = bmh.height + ((short) (bmh.wh_extra&0xf0)<<4);
+			if (bmh.dflags & DBM_FLAG_ABM)
+				sprintf(temp_name, "%s#%d", temp_name_read, bmh.dflags & 63);
+			else
+				strcpy(temp_name, temp_name_read);
+
+			//Make sure name matches
+			if (strcmp(temp_name, AllBitmaps[i].name)) {
+				//Int3();       //this pig is out of date.  Delete it
+				must_rewrite_pig = 1;
+			}
+
+			strcpy(AllBitmaps[i].name, temp_name);
+
+			memset(&temp_bitmap, 0, sizeof(grs_bitmap));
+
+			temp_bitmap.bm_w = temp_bitmap.bm_rowsize = bmh.width + ((short)(bmh.wh_extra & 0x0f) << 8);
+			temp_bitmap.bm_h = bmh.height + ((short)(bmh.wh_extra & 0xf0) << 4);
 			temp_bitmap.bm_flags = BM_FLAG_PAGED_OUT;
 			temp_bitmap.avg_color = bmh.avg_color;
 			temp_bitmap.bm_data = Piggy_bitmap_cache_data;
-	
+
 			GameBitmapFlags[i] = 0;
-	
-			if ( bmh.flags & BM_FLAG_TRANSPARENT ) GameBitmapFlags[i] |= BM_FLAG_TRANSPARENT;
-			if ( bmh.flags & BM_FLAG_SUPER_TRANSPARENT ) GameBitmapFlags[i] |= BM_FLAG_SUPER_TRANSPARENT;
-			if ( bmh.flags & BM_FLAG_NO_LIGHTING ) GameBitmapFlags[i] |= BM_FLAG_NO_LIGHTING;
-			if ( bmh.flags & BM_FLAG_RLE ) GameBitmapFlags[i] |= BM_FLAG_RLE;
-			if ( bmh.flags & BM_FLAG_RLE_BIG ) GameBitmapFlags[i] |= BM_FLAG_RLE_BIG;
-	
+
+			if (bmh.flags & BM_FLAG_TRANSPARENT) GameBitmapFlags[i] |= BM_FLAG_TRANSPARENT;
+			if (bmh.flags & BM_FLAG_SUPER_TRANSPARENT) GameBitmapFlags[i] |= BM_FLAG_SUPER_TRANSPARENT;
+			if (bmh.flags & BM_FLAG_NO_LIGHTING) GameBitmapFlags[i] |= BM_FLAG_NO_LIGHTING;
+			if (bmh.flags & BM_FLAG_RLE) GameBitmapFlags[i] |= BM_FLAG_RLE;
+			if (bmh.flags & BM_FLAG_RLE_BIG) GameBitmapFlags[i] |= BM_FLAG_RLE_BIG;
+
 			GameBitmapOffset[i] = bmh.offset + data_start;
-	
+
 			GameBitmaps[i] = temp_bitmap;
 		}
 	}
 	else
 		N_bitmaps = 0;          //no pigfile, so no bitmaps
 
-	#ifndef EDITOR
+#ifndef EDITOR
 
-	Assert(N_bitmaps == Num_bitmap_files-1);
+	Assert(N_bitmaps == Num_bitmap_files - 1);
 
-	#else
+#else
 
-	if (must_rewrite_pig || (N_bitmaps < Num_bitmap_files-1)) {
+	if (must_rewrite_pig || (N_bitmaps < Num_bitmap_files - 1)) {
 		int size;
 
 		//re-read the bitmaps that aren't in this pig
 
-		for (i=N_bitmaps+1;i<Num_bitmap_files;i++) {
-			char *p;
+		for (i = N_bitmaps + 1; i < Num_bitmap_files; i++) {
+			char* p;
 
-			p = strchr(AllBitmaps[i].name,'#');
+			p = strchr(AllBitmaps[i].name, '#');
 
 			if (p) {                //this is an ABM
 				char abmname[FILENAME_LEN];
 				int fnum;
-				grs_bitmap * bm[MAX_BITMAPS_PER_BRUSH];
+				grs_bitmap* bm[MAX_BITMAPS_PER_BRUSH];
 				int iff_error;          //reference parm to avoid warning message
 				ubyte newpal[768];
 				char basename[FILENAME_LEN];
 				int nframes;
-			
-				strcpy(basename,AllBitmaps[i].name);
-				basename[p-AllBitmaps[i].name] = 0;             //cut off "#nn" part
-				
-				sprintf( abmname, "%s.abm", basename );
 
-		      iff_error = iff_read_animbrush(abmname,bm,MAX_BITMAPS_PER_BRUSH,&nframes,newpal);
+				strcpy(basename, AllBitmaps[i].name);
+				basename[p - AllBitmaps[i].name] = 0;             //cut off "#nn" part
 
-				if (iff_error != IFF_NO_ERROR)  {
-					mprintf((1,"File %s - IFF error: %s",abmname,iff_errormsg(iff_error)));
-					Error("File %s - IFF error: %s",abmname,iff_errormsg(iff_error));
+				sprintf(abmname, "%s.abm", basename);
+
+				iff_error = iff_read_animbrush(abmname, bm, MAX_BITMAPS_PER_BRUSH, &nframes, newpal);
+
+				if (iff_error != IFF_NO_ERROR) {
+					mprintf((1, "File %s - IFF error: %s", abmname, iff_errormsg(iff_error)));
+					Error("File %s - IFF error: %s", abmname, iff_errormsg(iff_error));
 				}
-			
-				for (fnum=0;fnum<nframes; fnum++)       {
+
+				for (fnum = 0; fnum < nframes; fnum++) {
 					char tempname[20];
 					int SuperX;
 
-					sprintf( tempname, "%s#%d", basename, fnum );
+					sprintf(tempname, "%s#%d", basename, fnum);
 
 					//SuperX = (GameBitmaps[i+fnum].bm_flags&BM_FLAG_SUPER_TRANSPARENT)?254:-1;
-					SuperX = (GameBitmapFlags[i+fnum]&BM_FLAG_SUPER_TRANSPARENT)?254:-1;
+					SuperX = (GameBitmapFlags[i + fnum] & BM_FLAG_SUPER_TRANSPARENT) ? 254 : -1;
 					//above makes assumption that supertransparent color is 254
 
-					if ( iff_has_transparency )
-						gr_remap_bitmap_good( bm[fnum], newpal, iff_transparent_color, SuperX );
+					if (iff_has_transparency)
+						gr_remap_bitmap_good(bm[fnum], newpal, iff_transparent_color, SuperX);
 					else
-						gr_remap_bitmap_good( bm[fnum], newpal, -1, SuperX );
-			
+						gr_remap_bitmap_good(bm[fnum], newpal, -1, SuperX);
+
 					bm[fnum]->avg_color = compute_average_pixel(bm[fnum]);
 
 #ifdef EDITOR
-					if ( FindArg("-macdata") )
-						swap_0_255( bm[fnum] );
+					if (FindArg("-macdata"))
+						swap_0_255(bm[fnum]);
 #endif
-					if ( !BigPig ) gr_bitmap_rle_compress( bm[fnum] );
+					if (!BigPig) gr_bitmap_rle_compress(bm[fnum]);
 
 					if (bm[fnum]->bm_flags & BM_FLAG_RLE)
-						size = *((int *) bm[fnum]->bm_data);
+						size = *((int*)bm[fnum]->bm_data);
 					else
 						size = bm[fnum]->bm_w * bm[fnum]->bm_h;
 
-					memcpy( &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next],bm[fnum]->bm_data,size);
+					memcpy(&Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], bm[fnum]->bm_data, size);
 					free(bm[fnum]->bm_data);
 					bm[fnum]->bm_data = &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next];
 					Piggy_bitmap_cache_next += size;
 
-					GameBitmaps[i+fnum] = *bm[fnum];
+					GameBitmaps[i + fnum] = *bm[fnum];
 
 					// -- mprintf( (0, "U" ));
-					free( bm[fnum] );
+					free(bm[fnum]);
 				}
 
-				i += nframes-1;         //filled in multiple bitmaps
+				i += nframes - 1;         //filled in multiple bitmaps
 			}
 			else {          //this is a BBM
 
-				grs_bitmap * new;
-				ubyte newpal[256*3];
+				grs_bitmap* new;
+				ubyte newpal[256 * 3];
 				int iff_error;
 				char bbmname[FILENAME_LEN];
 				int SuperX;
 
-				MALLOC( new, grs_bitmap, 1 );
+				MALLOC(new, grs_bitmap, 1);
 
-				sprintf( bbmname, "%s.bbm", AllBitmaps[i].name );
-				iff_error = iff_read_bitmap(bbmname,new,BM_LINEAR,newpal);
+				sprintf(bbmname, "%s.bbm", AllBitmaps[i].name);
+				iff_error = iff_read_bitmap(bbmname, new, BM_LINEAR, newpal);
 
-				new->bm_handle=0;
-				if (iff_error != IFF_NO_ERROR)          {
-					mprintf((1, "File %s - IFF error: %s",bbmname,iff_errormsg(iff_error)));
-					Error("File %s - IFF error: %s",bbmname,iff_errormsg(iff_error));
+				new->bm_handle = 0;
+				if (iff_error != IFF_NO_ERROR) {
+					mprintf((1, "File %s - IFF error: %s", bbmname, iff_errormsg(iff_error)));
+					Error("File %s - IFF error: %s", bbmname, iff_errormsg(iff_error));
 				}
-			
-				SuperX = (GameBitmapFlags[i]&BM_FLAG_SUPER_TRANSPARENT)?254:-1;
+
+				SuperX = (GameBitmapFlags[i] & BM_FLAG_SUPER_TRANSPARENT) ? 254 : -1;
 				//above makes assumption that supertransparent color is 254
 
-				if ( iff_has_transparency )
-					gr_remap_bitmap_good( new, newpal, iff_transparent_color, SuperX );
+				if (iff_has_transparency)
+					gr_remap_bitmap_good(new, newpal, iff_transparent_color, SuperX);
 				else
-					gr_remap_bitmap_good( new, newpal, -1, SuperX );
-			
+					gr_remap_bitmap_good(new, newpal, -1, SuperX);
+
 				new->avg_color = compute_average_pixel(new);
-			
+
 #ifdef EDITOR
-					if ( FindArg("-macdata") )
-						swap_0_255( new );
+				if (FindArg("-macdata"))
+					swap_0_255(new);
 #endif
-				if ( !BigPig )  gr_bitmap_rle_compress( new );
+				if (!BigPig)  gr_bitmap_rle_compress(new);
 
 				if (new->bm_flags & BM_FLAG_RLE)
-					size = *((int *) new->bm_data);
+					size = *((int*) new->bm_data);
 				else
 					size = new->bm_w * new->bm_h;
 
-				memcpy( &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next],new->bm_data,size);
+				memcpy(&Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], new->bm_data, size);
 				free(new->bm_data);
 				new->bm_data = &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next];
 				Piggy_bitmap_cache_next += size;
 
 				GameBitmaps[i] = *new;
-	
-				free( new );
+
+				free(new);
 
 				// -- mprintf( (0, "U" ));
 			}
@@ -939,21 +941,21 @@ void piggy_new_pigfile(char *pigname)
 		piggy_write_pigfile(pigname);
 
 		Current_pigfile[0] = 0;                 //say no pig, to force reload
-		
+
 		piggy_new_pigfile(pigname);             //read in just-generated pig
 
 
 	}
-	#endif  //ifdef EDITOR
+#endif  //ifdef EDITOR
 
 }
 
-ubyte bogus_data[64*64];
+ubyte bogus_data[64 * 64];
 grs_bitmap bogus_bitmap;
-ubyte bogus_bitmap_initialized=0;
+ubyte bogus_bitmap_initialized = 0;
 digi_sound bogus_sound;
 
-extern void bm_read_all(CFILE * fp);
+extern void bm_read_all(CFILE* fp);
 
 #define HAMFILE_ID              '!MAH'          //HAM!
 #define HAMFILE_VERSION 3
@@ -965,19 +967,19 @@ extern void bm_read_all(CFILE * fp);
 
 int read_hamfile()
 {
-	CFILE * ham_fp = NULL;
-	int ham_id,ham_version;
-	#ifdef MACINTOSH
+	CFILE* ham_fp = NULL;
+	int ham_id, ham_version;
+#ifdef MACINTOSH
 	char name[255];
-	#endif
-	
-	#ifndef MACINTOSH
-	ham_fp = cfopen( DEFAULT_HAMFILE, "rb" );
-	#else
-	sprintf(name, ":Data:%s", DEFAULT_HAMFILE );
-	ham_fp = cfopen( name, "rb" );
-	#endif
-	
+#endif
+
+#ifndef MACINTOSH
+	ham_fp = cfopen(DEFAULT_HAMFILE, "rb");
+#else
+	sprintf(name, ":Data:%s", DEFAULT_HAMFILE);
+	ham_fp = cfopen(name, "rb");
+#endif
+
 	if (ham_fp == NULL) {
 		Must_write_hamfile = 1;
 		return 0;
@@ -992,20 +994,20 @@ int read_hamfile()
 		return 0;
 	}
 
-	#ifndef EDITOR
+#ifndef EDITOR
 	{
-		bm_read_all( ham_fp );  // Note connection to above if!!!
-		cfread( GameBitmapXlat, sizeof(ushort)*MAX_BITMAP_FILES, 1, ham_fp );
-		#ifdef MACINTOSH
+		bm_read_all(ham_fp);  // Note connection to above if!!!
+		cfread(GameBitmapXlat, sizeof(ushort) * MAX_BITMAP_FILES, 1, ham_fp);
+#ifdef MACINTOSH
 		{
 			int i;
-			
+
 			for (i = 0; i < MAX_BITMAP_FILES; i++)
 				GameBitmapXlat[i] = SWAPSHORT(GameBitmapXlat[i]);
 		}
-		#endif
+#endif
 	}
-	#endif
+#endif
 
 	cfclose(ham_fp);
 
@@ -1015,27 +1017,27 @@ int read_hamfile()
 
 int read_sndfile()
 {
-	CFILE * snd_fp = NULL;
-	int snd_id,snd_version;
+	CFILE* snd_fp = NULL;
+	int snd_id, snd_version;
 	int N_sounds;
 	int sound_start;
 	int header_size;
-	int i,size, length;
+	int i, size, length;
 	DiskSoundHeader sndh;
 	digi_sound temp_sound;
 	char temp_name_read[16];
 	int sbytes = 0;
-	#ifdef MACINTOSH
+#ifdef MACINTOSH
 	char name[255];
-	#endif
+#endif
 
-	#ifndef MACINTOSH
-	snd_fp = cfopen( DEFAULT_SNDFILE, "rb" );
-	#else
-	sprintf( name, ":Data:%s", DEFAULT_SNDFILE );
-	snd_fp = cfopen( name, "rb");
-	#endif
-	
+#ifndef MACINTOSH
+	snd_fp = cfopen(DEFAULT_SNDFILE, "rb");
+#else
+	sprintf(name, ":Data:%s", DEFAULT_SNDFILE);
+	snd_fp = cfopen(name, "rb");
+#endif
+
 	if (snd_fp == NULL)
 		return 0;
 
@@ -1052,39 +1054,39 @@ int read_sndfile()
 	sound_start = cftell(snd_fp);
 	size = cfilelength(snd_fp) - sound_start;
 	length = size;
-	mprintf( (0, "\nReading data (%d KB) ", size/1024 ));
+	mprintf((0, "\nReading data (%d KB) ", size / 1024));
 
-	header_size = N_sounds*sizeof(DiskSoundHeader);
+	header_size = N_sounds * sizeof(DiskSoundHeader);
 
 	//Read sounds
 
-	for (i=0; i<N_sounds; i++ )     {
-		cfread( sndh.name, 8, 1, snd_fp);
+	for (i = 0; i < N_sounds; i++) {
+		cfread(sndh.name, 8, 1, snd_fp);
 		sndh.length = cfile_read_int(snd_fp);
 		sndh.data_length = cfile_read_int(snd_fp);
 		sndh.offset = cfile_read_int(snd_fp);
-//		cfread( &sndh, sizeof(DiskSoundHeader), 1, snd_fp );
-		//size -= sizeof(DiskSoundHeader);
+		//		cfread( &sndh, sizeof(DiskSoundHeader), 1, snd_fp );
+				//size -= sizeof(DiskSoundHeader);
 		temp_sound.length = sndh.length;
-		temp_sound.data = (ubyte *)(sndh.offset + header_size + sound_start);
+		temp_sound.data = (ubyte*)(sndh.offset + header_size + sound_start);
 		SoundOffset[Num_sound_files] = sndh.offset + header_size + sound_start;
-		memcpy( temp_name_read, sndh.name, 8 );
+		memcpy(temp_name_read, sndh.name, 8);
 		temp_name_read[8] = 0;
-		piggy_register_sound( &temp_sound, temp_name_read, 1 );
-		#ifdef MACINTOSH
+		piggy_register_sound(&temp_sound, temp_name_read, 1);
+#ifdef MACINTOSH
 		if (piggy_is_needed(i))
-		#endif		// note link to if.
-		sbytes += sndh.length;
+#endif		// note link to if.
+			sbytes += sndh.length;
 		//mprintf(( 0, "%d bytes of sound\n", sbytes ));
 	}
 
-	SoundBits = malloc( sbytes + 16 );
-	if ( SoundBits == NULL )
-		Error( "Not enough memory to load sounds\n" );
+	SoundBits = malloc(sbytes + 16);
+	if (SoundBits == NULL)
+		Error("Not enough memory to load sounds\n");
 
-	mprintf(( 0, "\nBitmaps: %d KB   Sounds: %d KB\n", Piggy_bitmap_cache_size/1024, sbytes/1024 ));
+	mprintf((0, "\nBitmaps: %d KB   Sounds: %d KB\n", Piggy_bitmap_cache_size / 1024, sbytes / 1024));
 
-//	piggy_read_sounds(snd_fp);
+	//	piggy_read_sounds(snd_fp);
 
 	cfclose(snd_fp);
 
@@ -1093,66 +1095,68 @@ int read_sndfile()
 
 int piggy_init(void)
 {
-	int ham_ok=0,snd_ok=0;
+	int ham_ok = 0, snd_ok = 0;
 	int i;
 
-	hashtable_init( &AllBitmapsNames, MAX_BITMAP_FILES );
-	hashtable_init( &AllDigiSndNames, MAX_SOUND_FILES );
+	// hashtable_init( &AllBitmapsNames, MAX_BITMAP_FILES );
+	// hashtable_init( &AllDigiSndNames, MAX_SOUND_FILES );
 
-	for (i=0; i<MAX_SOUND_FILES; i++ )	{
+	for (i = 0; i < MAX_SOUND_FILES; i++) {
 		GameSounds[i].length = 0;
 		GameSounds[i].data = NULL;
 		SoundOffset[i] = 0;
 	}
 
-	for (i=0; i<MAX_BITMAP_FILES; i++ )     
+	for (i = 0; i < MAX_BITMAP_FILES; i++)
 		GameBitmapXlat[i] = i;
 
-	if ( !bogus_bitmap_initialized )        {
+	if (!bogus_bitmap_initialized) {
 		int i;
-		ubyte c;
+		ubyte c = 0;
 		bogus_bitmap_initialized = 1;
-		memset( &bogus_bitmap, 0, sizeof(grs_bitmap) );
+		memset(&bogus_bitmap, 0, sizeof(grs_bitmap));
 		bogus_bitmap.bm_w = bogus_bitmap.bm_h = bogus_bitmap.bm_rowsize = 64;
 		bogus_bitmap.bm_data = bogus_data;
-		c = gr_find_closest_color( 0, 0, 63 );
-		for (i=0; i<4096; i++ ) bogus_data[i] = c;
-		c = gr_find_closest_color( 63, 0, 0 );
+		//c = gr_find_closest_color( 0, 0, 63 );
+		//for (i=0; i<4096; i++ ) bogus_data[i] = c;
+		//c = gr_find_closest_color( 63, 0, 0 );
 		// Make a big red X !
-		for (i=0; i<64; i++ )   {
-			bogus_data[i*64+i] = c;
-			bogus_data[i*64+(63-i)] = c;
+		for (i = 0; i < 64; i++) {
+			bogus_data[i * 64 + i] = c;
+			bogus_data[i * 64 + (63 - i)] = c;
 		}
-		piggy_register_bitmap( &bogus_bitmap, "bogus", 1 );
-		bogus_sound.length = 64*64;
+		piggy_register_bitmap(&bogus_bitmap, "bogus", 1);
+		bogus_sound.length = 64 * 64;
 		bogus_sound.data = bogus_data;
 		GameBitmapOffset[0] = 0;
 	}
 
-	if ( FindArg( "-bigpig" ))
-		BigPig = 1;
-
-	if ( FindArg( "-lowmem" ))
-		piggy_low_memory = 1;
-
-	if ( FindArg( "-nolowmem" ))
-		piggy_low_memory = 0;
+	// if ( FindArg( "-bigpig" ))
+	// 	BigPig = 1;
+	// 
+	// if ( FindArg( "-lowmem" ))
+	// 	piggy_low_memory = 1;
+	// 
+	// if ( FindArg( "-nolowmem" ))
+	// 	piggy_low_memory = 0;
 
 	if (piggy_low_memory)
-		digi_lomem = 1;
+	{
+		//digi_lomem = 1;
+	}
 
-	if ( (i=FindArg( "-piggy" )) ) 
-		Error("-piggy no longer supported");
+	// if ( (i=FindArg( "-piggy" )) ) 
+	// 	Error("-piggy no longer supported");
 
-	WIN(DDGRLOCK(dd_grd_curcanv));
-		gr_set_curfont( SMALL_FONT );
-		gr_set_fontcolor(gr_find_closest_color_current( 20, 20, 20 ),-1 );
-		gr_printf( 0x8000, grd_curcanv->cv_h-20, "%s...", TXT_LOADING_DATA );
-	WIN(DDGRUNLOCK(dd_grd_curcanv));
-		
-	#ifdef EDITOR
+	//WIN(DDGRLOCK(dd_grd_curcanv));
+	// gr_set_curfont( SMALL_FONT );
+	// gr_set_fontcolor(gr_find_closest_color_current( 20, 20, 20 ),-1 );
+	// gr_printf( 0x8000, grd_curcanv->cv_h-20, "%s...", TXT_LOADING_DATA );
+	//WIN(DDGRUNLOCK(dd_grd_curcanv));
+
+#ifdef EDITOR
 	piggy_init_pigfile(DEFAULT_PIGFILE);
-	#endif
+#endif
 
 	ham_ok = read_hamfile();
 
@@ -1160,7 +1164,7 @@ int piggy_init(void)
 
 	atexit(piggy_close);
 
-   mprintf ((0,"HamOk=%d SndOk=%d\n",ham_ok,snd_ok));
+	mprintf((0, "HamOk=%d SndOk=%d\n", ham_ok, snd_ok));
 	return (ham_ok && snd_ok);               //read ok
 }
 
@@ -1168,10 +1172,12 @@ int piggy_is_needed(int soundnum)
 {
 	int i;
 
-	if ( !digi_lomem ) return 1;
-
-	for (i=0; i<MAX_SOUNDS; i++ )   {
-		if ( (AltSounds[i] < 255) && (Sounds[AltSounds[i]] == soundnum) )
+	if (0)//!digi_lomem)
+	{
+		return 1;
+	}
+	for (i = 0; i < MAX_SOUNDS; i++) {
+		if ((AltSounds[i] < 255) && (Sounds[AltSounds[i]] == soundnum))
 			return 1;
 	}
 	return 0;
@@ -1180,153 +1186,154 @@ int piggy_is_needed(int soundnum)
 
 void piggy_read_sounds(void)
 {
-	CFILE * fp = NULL;
-	ubyte * ptr;
+	CFILE* fp = NULL;
+	ubyte* ptr;
 	int i, sbytes;
-	#ifdef MACINTOSH
+#ifdef MACINTOSH
 	char name[255];
-	#endif
+#endif
 
 	ptr = SoundBits;
 	sbytes = 0;
 
-	#ifndef MACINTOSH
-	fp = cfopen( DEFAULT_SNDFILE, "rb" );
-	#else
-	sprintf( name, ":Data:%s", DEFAULT_SNDFILE );
-	fp = cfopen( name, "rb");
-	#endif
+#ifndef MACINTOSH
+	fp = cfopen(DEFAULT_SNDFILE, "rb");
+#else
+	sprintf(name, ":Data:%s", DEFAULT_SNDFILE);
+	fp = cfopen(name, "rb");
+#endif
 
 	if (fp == NULL)
 		return;
 
-	for (i=0; i<Num_sound_files; i++ )      {
-		digi_sound *snd = &GameSounds[i];
+	for (i = 0; i < Num_sound_files; i++) {
+		digi_sound* snd = &GameSounds[i];
 
-		if ( SoundOffset[i] > 0 )       {
-			if ( piggy_is_needed(i) )       {
-				cfseek( fp, SoundOffset[i], SEEK_SET );
-	
+		if (SoundOffset[i] > 0) {
+			if (piggy_is_needed(i)) {
+				cfseek(fp, SoundOffset[i], SEEK_SET);
+
 				// Read in the sound data!!!
 				snd->data = ptr;
 				ptr += snd->length;
 				sbytes += snd->length;
-				cfread( snd->data, snd->length, 1, fp );
+				cfread(snd->data, snd->length, 1, fp);
 			}
 			else
-				snd->data = (ubyte *) -1;
+				snd->data = (ubyte*)-1;
 		}
 	}
 
 	cfclose(fp);
 
-	mprintf(( 0, "\nActual Sound usage: %d KB\n", sbytes/1024 ));
+	mprintf((0, "\nActual Sound usage: %d KB\n", sbytes / 1024));
 
 }
 
 
-extern int descent_critical_error;
-extern unsigned descent_critical_deverror;
-extern unsigned descent_critical_errcode;
+int descent_critical_error;
+unsigned descent_critical_deverror;
+unsigned descent_critical_errcode;
 
-char * crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready", "Unknown Command", "CRC Error", \
+char* crit_errors[13] = { "Write Protected", "Unknown Unit", "Drive Not Ready", "Unknown Command", "CRC Error", \
 "Bad struct length", "Seek Error", "Unknown media type", "Sector not found", "Printer out of paper", "Write Fault", \
 "Read fault", "General Failure" };
 
 void piggy_critical_error()
 {
-	grs_canvas * save_canv;
-	grs_font * save_font;
-	int i;
-	save_canv = grd_curcanv;
-	save_font = grd_curcanv->cv_font;
-	gr_palette_load( gr_palette );
-	i = nm_messagebox( "Disk Error", 2, "Retry", "Exit", "%s\non drive %c:", crit_errors[descent_critical_errcode&0xf], (descent_critical_deverror&0xf)+'A'  );
-	if ( i == 1 )
+	grs_canvas* save_canv;
+	grs_font* save_font;
+	int i= 0;
+	//save_canv = grd_curcanv;
+	//save_font = grd_curcanv->cv_font;
+	//gr_palette_load( gr_palette );
+//	i = nm_messagebox("Disk Error", 2, "Retry", "Exit", "%s\non drive %c:", crit_errors[descent_critical_errcode & 0xf], (descent_critical_deverror & 0xf) + 'A');
+	if (i == 1)
 		exit(1);
-	gr_set_current_canvas(save_canv);
-	grd_curcanv->cv_font = save_font;
+	//gr_set_current_canvas(save_canv);
+//	grd_curcanv->cv_font = save_font;
 }
 
-void piggy_bitmap_page_in( bitmap_index bitmap )
+void piggy_bitmap_page_in(bitmap_index bitmap)
 {
-	grs_bitmap * bmp;
-	int i,org_i,temp;
+	grs_bitmap* bmp;
+	int i, org_i, temp;
 
 	i = bitmap.index;
-	Assert( i >= 0 );
-	Assert( i < MAX_BITMAP_FILES );
-	Assert( i < Num_bitmap_files );
-	Assert( Piggy_bitmap_cache_size > 0 );
+	Assert(i >= 0);
+	Assert(i < MAX_BITMAP_FILES);
+	Assert(i < Num_bitmap_files);
+	Assert(Piggy_bitmap_cache_size > 0);
 
-	if ( i < 1 ) return;
-	if ( i >= MAX_BITMAP_FILES ) return;
-	if ( i >= Num_bitmap_files ) return;
-	
-	if ( GameBitmapOffset[i] == 0 ) return;         // A read-from-disk bitmap!!!
+	if (i < 1) return;
+	if (i >= MAX_BITMAP_FILES) return;
+	if (i >= Num_bitmap_files) return;
 
-	if ( piggy_low_memory ) {
+	if (GameBitmapOffset[i] == 0) return;         // A read-from-disk bitmap!!!
+
+	if (piggy_low_memory) {
 		org_i = i;
 		i = GameBitmapXlat[i];          // Xlat for low-memory settings!
 	}
-	
+
 	bmp = &GameBitmaps[i];
 
-	if ( bmp->bm_flags & BM_FLAG_PAGED_OUT )        {
-		stop_time();
+	if (bmp->bm_flags & BM_FLAG_PAGED_OUT) {
+		//stop_time();
 
 	ReDoIt:
 		descent_critical_error = 0;
-		cfseek( Piggy_fp, GameBitmapOffset[i], SEEK_SET );
-		if ( descent_critical_error )   {
+		cfseek(Piggy_fp, GameBitmapOffset[i], SEEK_SET);
+		if (descent_critical_error) {
 			piggy_critical_error();
 			goto ReDoIt;
 		}
-		
+
 		bmp->bm_data = &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next];
 		bmp->bm_flags = GameBitmapFlags[i];
-	
-		if ( bmp->bm_flags & BM_FLAG_RLE )      {
+
+		if (bmp->bm_flags & BM_FLAG_RLE) {
 			int zsize = 0;
 			descent_critical_error = 0;
 			zsize = cfile_read_int(Piggy_fp);
-			if ( descent_critical_error )   {
+			if (descent_critical_error) {
 				piggy_critical_error();
 				goto ReDoIt;
 			}
-	
+
 			// GET JOHN NOW IF YOU GET THIS ASSERT!!!
 			//Assert( Piggy_bitmap_cache_next+zsize < Piggy_bitmap_cache_size );      
-			if ( Piggy_bitmap_cache_next+zsize >= Piggy_bitmap_cache_size ) {
-				Int3();
+			if (Piggy_bitmap_cache_next + zsize >= Piggy_bitmap_cache_size) {
+				//Int3();
 				piggy_bitmap_page_out_all();
 				goto ReDoIt;
 			}
-			memcpy( &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], &zsize, sizeof(int) );
+			memcpy(&Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], &zsize, sizeof(int));
 			Piggy_bitmap_cache_next += sizeof(int);
 			descent_critical_error = 0;
-			temp = cfread( &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], 1, zsize-4, Piggy_fp );
-			if ( descent_critical_error )   {
+			temp = cfread(&Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], 1, zsize - 4, Piggy_fp);
+			if (descent_critical_error) {
 				piggy_critical_error();
 				goto ReDoIt;
 			}
-			Piggy_bitmap_cache_next += zsize-4;
-		} else {
+			Piggy_bitmap_cache_next += zsize - 4;
+		}
+		else {
 			// GET JOHN NOW IF YOU GET THIS ASSERT!!!
-			Assert( Piggy_bitmap_cache_next+(bmp->bm_h*bmp->bm_w) < Piggy_bitmap_cache_size );      
-			if ( Piggy_bitmap_cache_next+(bmp->bm_h*bmp->bm_w) >= Piggy_bitmap_cache_size ) {
+			Assert(Piggy_bitmap_cache_next + (bmp->bm_h * bmp->bm_w) < Piggy_bitmap_cache_size);
+			if (Piggy_bitmap_cache_next + (bmp->bm_h * bmp->bm_w) >= Piggy_bitmap_cache_size) {
 				piggy_bitmap_page_out_all();
 				goto ReDoIt;
 			}
 			descent_critical_error = 0;
-			temp = cfread( &Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], 1, bmp->bm_h*bmp->bm_w, Piggy_fp );
-			if ( descent_critical_error )   {
+			temp = cfread(&Piggy_bitmap_cache_data[Piggy_bitmap_cache_next], 1, bmp->bm_h * bmp->bm_w, Piggy_fp);
+			if (descent_critical_error) {
 				piggy_critical_error();
 				goto ReDoIt;
 			}
-			Piggy_bitmap_cache_next+=bmp->bm_h*bmp->bm_w;
+			Piggy_bitmap_cache_next += bmp->bm_h * bmp->bm_w;
 		}
-	
+
 		//@@if ( bmp->bm_selector ) {
 		//@@#if !defined(WINDOWS) && !defined(MACINTOSH)
 		//@@	if (!dpmi_modify_selector_base( bmp->bm_selector, bmp->bm_data ))
@@ -1334,71 +1341,71 @@ void piggy_bitmap_page_in( bitmap_index bitmap )
 		//@@#endif
 		//@@}
 
-		start_time();
+		//start_time();
 	}
 
-	if ( piggy_low_memory ) {
-		if ( org_i != i )
+	if (piggy_low_memory) {
+		if (org_i != i)
 			GameBitmaps[org_i] = GameBitmaps[i];
 	}
 
-//@@Removed from John's code:
-//@@#ifndef WINDOWS
-//@@    if ( bmp->bm_selector ) {
-//@@            if (!dpmi_modify_selector_base( bmp->bm_selector, bmp->bm_data ))
-//@@                    Error( "Error modifying selector base in piggy.c\n" );
-//@@    }
-//@@#endif
+	//@@Removed from John's code:
+	//@@#ifndef WINDOWS
+	//@@    if ( bmp->bm_selector ) {
+	//@@            if (!dpmi_modify_selector_base( bmp->bm_selector, bmp->bm_data ))
+	//@@                    Error( "Error modifying selector base in piggy.c\n" );
+	//@@    }
+	//@@#endif
 
 }
 
 void piggy_bitmap_page_out_all()
 {
 	int i;
-	
+
 	Piggy_bitmap_cache_next = 0;
 
 	piggy_page_flushed++;
 
-	texmerge_flush();
-	rle_cache_flush();
+	// texmerge_flush();
+	// rle_cache_flush();
 
-	for (i=0; i<Num_bitmap_files; i++ )             {
-		if ( GameBitmapOffset[i] > 0 )  {       // Don't page out bitmaps read from disk!!!
+	for (i = 0; i < Num_bitmap_files; i++) {
+		if (GameBitmapOffset[i] > 0) {       // Don't page out bitmaps read from disk!!!
 			GameBitmaps[i].bm_flags = BM_FLAG_PAGED_OUT;
 			GameBitmaps[i].bm_data = Piggy_bitmap_cache_data;
 		}
 	}
 
-	mprintf(( 0, "Flushing piggy bitmap cache\n" ));
+	mprintf((0, "Flushing piggy bitmap cache\n"));
 }
 
 void piggy_load_level_data()
 {
-	piggy_bitmap_page_out_all();
-	paging_touch_all();
+	// piggy_bitmap_page_out_all();
+	// paging_touch_all();
 }
 
 #ifdef EDITOR
 
-void change_filename_ext( char *dest, char *src, char *ext );
+void change_filename_ext(char* dest, char* src, char* ext);
 
-void piggy_write_pigfile(char *filename)
+void piggy_write_pigfile(char* filename)
 {
-	FILE *pig_fp;
-	int bitmap_data_start,data_offset;
+	FILE* pig_fp;
+	int bitmap_data_start, data_offset;
 	DiskBitmapHeader bmh;
 	int org_offset;
 	char subst_name[32];
 	int i;
-	FILE *fp1,*fp2;
+	FILE* fp1, * fp2;
 	char tname[FILENAME_LEN];
 
 	// -- mprintf( (0, "Paging in all piggy bitmaps..." ));
-	for (i=0; i < Num_bitmap_files; i++ )   {
+	for (i = 0; i < Num_bitmap_files; i++) {
 		bitmap_index bi;
 		bi.index = i;
-		PIGGY_PAGE_IN( bi );
+		PIGGY_PAGE_IN(bi);
 	}
 	// -- mprintf( (0, "\n" ));
 
@@ -1406,210 +1413,213 @@ void piggy_write_pigfile(char *filename)
 
 	// -- mprintf( (0, "Creating %s...",filename ));
 
-	pig_fp = fopen( filename, "wb" );       //open PIG file
-	Assert( pig_fp!=NULL );
+	pig_fp = fopen(filename, "wb");       //open PIG file
+	Assert(pig_fp != NULL);
 
-	write_int(PIGFILE_ID,pig_fp);
-	write_int(PIGFILE_VERSION,pig_fp);
+	write_int(PIGFILE_ID, pig_fp);
+	write_int(PIGFILE_VERSION, pig_fp);
 
 	Num_bitmap_files--;
-	fwrite( &Num_bitmap_files, sizeof(int), 1, pig_fp );
+	fwrite(&Num_bitmap_files, sizeof(int), 1, pig_fp);
 	Num_bitmap_files++;
 
 	bitmap_data_start = ftell(pig_fp);
-	bitmap_data_start += (Num_bitmap_files-1)*sizeof(DiskBitmapHeader); 
+	bitmap_data_start += (Num_bitmap_files - 1) * sizeof(DiskBitmapHeader);
 	data_offset = bitmap_data_start;
 
-	change_filename_ext(tname,filename,"lst");
-	fp1 = fopen( tname, "wt" );
-	change_filename_ext(tname,filename,"all");
-	fp2 = fopen( tname, "wt" );
+	change_filename_ext(tname, filename, "lst");
+	fp1 = fopen(tname, "wt");
+	change_filename_ext(tname, filename, "all");
+	fp2 = fopen(tname, "wt");
 
-	for (i=1; i < Num_bitmap_files; i++ )   {
-		int *size;
-		grs_bitmap *bmp;
+	for (i = 1; i < Num_bitmap_files; i++) {
+		int* size;
+		grs_bitmap* bmp;
 
-		{               
-			char * p, *p1;
-			p = strchr(AllBitmaps[i].name,'#');
-			if (p)  {
+		{
+			char* p, * p1;
+			p = strchr(AllBitmaps[i].name, '#');
+			if (p) {
 				int n;
-				p1 = p; p1++; 
+				p1 = p; p1++;
 				n = atoi(p1);
 				*p = 0;
-				if (fp2 && n==0)
-					fprintf( fp2, "%s.abm\n", AllBitmaps[i].name );
-				memcpy( bmh.name, AllBitmaps[i].name, 8 );
-				Assert( n <= 63 );
+				if (fp2 && n == 0)
+					fprintf(fp2, "%s.abm\n", AllBitmaps[i].name);
+				memcpy(bmh.name, AllBitmaps[i].name, 8);
+				Assert(n <= 63);
 				bmh.dflags = DBM_FLAG_ABM + n;
 				*p = '#';
-			}else {
+			}
+			else {
 				if (fp2)
-					fprintf( fp2, "%s.bbm\n", AllBitmaps[i].name );
-				memcpy( bmh.name, AllBitmaps[i].name, 8 );
+					fprintf(fp2, "%s.bbm\n", AllBitmaps[i].name);
+				memcpy(bmh.name, AllBitmaps[i].name, 8);
 				bmh.dflags = 0;
 			}
 		}
 		bmp = &GameBitmaps[i];
 
-		Assert( !(bmp->bm_flags&BM_FLAG_PAGED_OUT) );
+		Assert(!(bmp->bm_flags & BM_FLAG_PAGED_OUT));
 
 		if (fp1)
-			fprintf( fp1, "BMP: %s, size %d bytes", AllBitmaps[i].name, bmp->bm_rowsize * bmp->bm_h );
+			fprintf(fp1, "BMP: %s, size %d bytes", AllBitmaps[i].name, bmp->bm_rowsize * bmp->bm_h);
 		org_offset = ftell(pig_fp);
 		bmh.offset = data_offset - bitmap_data_start;
-		fseek( pig_fp, data_offset, SEEK_SET );
+		fseek(pig_fp, data_offset, SEEK_SET);
 
-		if ( bmp->bm_flags & BM_FLAG_RLE )      {
-			size = (int *)bmp->bm_data;
-			fwrite( bmp->bm_data, sizeof(ubyte), *size, pig_fp );
+		if (bmp->bm_flags & BM_FLAG_RLE) {
+			size = (int*)bmp->bm_data;
+			fwrite(bmp->bm_data, sizeof(ubyte), *size, pig_fp);
 			data_offset += *size;
 			if (fp1)
-				fprintf( fp1, ", and is already compressed to %d bytes.\n", *size );
-		} else {
-			fwrite( bmp->bm_data, sizeof(ubyte), bmp->bm_rowsize * bmp->bm_h, pig_fp );
+				fprintf(fp1, ", and is already compressed to %d bytes.\n", *size);
+		}
+		else {
+			fwrite(bmp->bm_data, sizeof(ubyte), bmp->bm_rowsize * bmp->bm_h, pig_fp);
 			data_offset += bmp->bm_rowsize * bmp->bm_h;
 			if (fp1)
-				fprintf( fp1, ".\n" );
+				fprintf(fp1, ".\n");
 		}
-		fseek( pig_fp, org_offset, SEEK_SET );
-		Assert( GameBitmaps[i].bm_w < 4096 );
+		fseek(pig_fp, org_offset, SEEK_SET);
+		Assert(GameBitmaps[i].bm_w < 4096);
 		bmh.width = (GameBitmaps[i].bm_w & 0xff);
 		bmh.wh_extra = ((GameBitmaps[i].bm_w >> 8) & 0x0f);
-		Assert( GameBitmaps[i].bm_h < 4096 );
+		Assert(GameBitmaps[i].bm_h < 4096);
 		bmh.height = GameBitmaps[i].bm_h;
 		bmh.wh_extra |= ((GameBitmaps[i].bm_h >> 4) & 0xf0);
 		bmh.flags = GameBitmaps[i].bm_flags;
-		if (piggy_is_substitutable_bitmap( AllBitmaps[i].name, subst_name ))    {
+		if (piggy_is_substitutable_bitmap(AllBitmaps[i].name, subst_name)) {
 			bitmap_index other_bitmap;
-			other_bitmap = piggy_find_bitmap( subst_name );
+			other_bitmap = piggy_find_bitmap(subst_name);
 			GameBitmapXlat[i] = other_bitmap.index;
 			bmh.flags |= BM_FLAG_PAGED_OUT;
 			//mprintf(( 0, "Skipping bitmap %d\n", i ));
 			//mprintf(( 0, "Marking '%s' as substitutible\n", AllBitmaps[i].name ));
-		} else  {
+		}
+		else {
 			bmh.flags &= ~BM_FLAG_PAGED_OUT;
 		}
-		bmh.avg_color=GameBitmaps[i].avg_color;
-		fwrite( &bmh, sizeof(DiskBitmapHeader), 1, pig_fp );                    // Mark as a bitmap
+		bmh.avg_color = GameBitmaps[i].avg_color;
+		fwrite(&bmh, sizeof(DiskBitmapHeader), 1, pig_fp);                    // Mark as a bitmap
 	}
 
 	fclose(pig_fp);
 
-	mprintf( (0, " Dumped %d assorted bitmaps.\n", Num_bitmap_files ));
-	fprintf( fp1, " Dumped %d assorted bitmaps.\n", Num_bitmap_files );
+	mprintf((0, " Dumped %d assorted bitmaps.\n", Num_bitmap_files));
+	fprintf(fp1, " Dumped %d assorted bitmaps.\n", Num_bitmap_files);
 
 	fclose(fp1);
 	fclose(fp2);
 
 }
 
-static void write_int(int i,FILE *file)
+static void write_int(int i, FILE* file)
 {
-	if (fwrite( &i, sizeof(i), 1, file) != 1)
-		Error( "Error reading int in gamesave.c" );
+	if (fwrite(&i, sizeof(i), 1, file) != 1)
+		Error("Error reading int in gamesave.c");
 
 }
 
 void piggy_dump_all()
 {
 	int i, xlat_offset;
-	FILE * ham_fp;
-	int org_offset,data_offset;
+	FILE* ham_fp;
+	int org_offset, data_offset;
 	DiskSoundHeader sndh;
 	int sound_data_start;
-	FILE *fp1,*fp2;
+	FILE* fp1, * fp2;
 
-	#ifdef NO_DUMP_SOUNDS
+#ifdef NO_DUMP_SOUNDS
 	Num_sound_files = 0;
 	Num_sound_files_new = 0;
-	#endif
+#endif
 
-	if (!Must_write_hamfile && (Num_bitmap_files_new == 0) && (Num_sound_files_new == 0) )
+	if (!Must_write_hamfile && (Num_bitmap_files_new == 0) && (Num_sound_files_new == 0))
 		return;
 
-	if ( (i=FindArg( "-piggy" )) )
+	if ((i = FindArg("-piggy")))
 		Error("-piggy no longer supported");
 
-	fp1 = fopen( "ham.lst", "wt" );
-	fp2 = fopen( "ham.all", "wt" );
+	fp1 = fopen("ham.lst", "wt");
+	fp2 = fopen("ham.all", "wt");
 
 	if (Must_write_hamfile || Num_bitmap_files_new) {
 
-		mprintf( (0, "Creating %s...",DEFAULT_HAMFILE));
-	
-		ham_fp = fopen( DEFAULT_HAMFILE, "wb" );                       //open HAM file
-		Assert( ham_fp!=NULL );
-	
-		write_int(HAMFILE_ID,ham_fp);
-		write_int(HAMFILE_VERSION,ham_fp);
-	
+		mprintf((0, "Creating %s...", DEFAULT_HAMFILE));
+
+		ham_fp = fopen(DEFAULT_HAMFILE, "wb");                       //open HAM file
+		Assert(ham_fp != NULL);
+
+		write_int(HAMFILE_ID, ham_fp);
+		write_int(HAMFILE_VERSION, ham_fp);
+
 		bm_write_all(ham_fp);
 		xlat_offset = ftell(ham_fp);
-		fwrite( GameBitmapXlat, sizeof(ushort)*MAX_BITMAP_FILES, 1, ham_fp );
+		fwrite(GameBitmapXlat, sizeof(ushort) * MAX_BITMAP_FILES, 1, ham_fp);
 		//Dump bitmaps
-	
+
 		if (Num_bitmap_files_new)
 			piggy_write_pigfile(DEFAULT_PIGFILE);
-	
+
 		//free up memeory used by new bitmaps
-		for (i=Num_bitmap_files-Num_bitmap_files_new;i<Num_bitmap_files;i++)
+		for (i = Num_bitmap_files - Num_bitmap_files_new; i < Num_bitmap_files; i++)
 			free(GameBitmaps[i].bm_data);
-	
+
 		//next thing must be done after pig written
-		fseek( ham_fp, xlat_offset, SEEK_SET );
-		fwrite( GameBitmapXlat, sizeof(ushort)*MAX_BITMAP_FILES, 1, ham_fp );
-	
+		fseek(ham_fp, xlat_offset, SEEK_SET);
+		fwrite(GameBitmapXlat, sizeof(ushort) * MAX_BITMAP_FILES, 1, ham_fp);
+
 		fclose(ham_fp);
-		mprintf( (0, "\n" ));
+		mprintf((0, "\n"));
 	}
-	
+
 	if (Num_sound_files_new) {
 
-		mprintf( (0, "Creating %s...",DEFAULT_HAMFILE));
+		mprintf((0, "Creating %s...", DEFAULT_HAMFILE));
 		// Now dump sound file
-		ham_fp = fopen( DEFAULT_SNDFILE, "wb" );
-		Assert( ham_fp!=NULL );
-	
-		write_int(SNDFILE_ID,ham_fp);
-		write_int(SNDFILE_VERSION,ham_fp);
+		ham_fp = fopen(DEFAULT_SNDFILE, "wb");
+		Assert(ham_fp != NULL);
 
-		fwrite( &Num_sound_files, sizeof(int), 1, ham_fp );
-	
-		mprintf( (0, "\nDumping sounds..." ));
-	
+		write_int(SNDFILE_ID, ham_fp);
+		write_int(SNDFILE_VERSION, ham_fp);
+
+		fwrite(&Num_sound_files, sizeof(int), 1, ham_fp);
+
+		mprintf((0, "\nDumping sounds..."));
+
 		sound_data_start = ftell(ham_fp);
-		sound_data_start += Num_sound_files*sizeof(DiskSoundHeader);
+		sound_data_start += Num_sound_files * sizeof(DiskSoundHeader);
 		data_offset = sound_data_start;
-	
-		for (i=0; i < Num_sound_files; i++ )    {
-			digi_sound *snd;
-	
+
+		for (i = 0; i < Num_sound_files; i++) {
+			digi_sound* snd;
+
 			snd = &GameSounds[i];
-			strcpy( sndh.name, AllSounds[i].name );
+			strcpy(sndh.name, AllSounds[i].name);
 			sndh.length = GameSounds[i].length;
 			sndh.offset = data_offset - sound_data_start;
-	
+
 			org_offset = ftell(ham_fp);
-			fseek( ham_fp, data_offset, SEEK_SET );
-	
+			fseek(ham_fp, data_offset, SEEK_SET);
+
 			sndh.data_length = GameSounds[i].length;
-			fwrite( snd->data, sizeof(ubyte), snd->length, ham_fp );
+			fwrite(snd->data, sizeof(ubyte), snd->length, ham_fp);
 			data_offset += snd->length;
-			fseek( ham_fp, org_offset, SEEK_SET );
-			fwrite( &sndh, sizeof(DiskSoundHeader), 1, ham_fp );                    // Mark as a bitmap
-	
-			fprintf( fp1, "SND: %s, size %d bytes\n", AllSounds[i].name, snd->length );
-			fprintf( fp2, "%s.raw\n", AllSounds[i].name );
+			fseek(ham_fp, org_offset, SEEK_SET);
+			fwrite(&sndh, sizeof(DiskSoundHeader), 1, ham_fp);                    // Mark as a bitmap
+
+			fprintf(fp1, "SND: %s, size %d bytes\n", AllSounds[i].name, snd->length);
+			fprintf(fp2, "%s.raw\n", AllSounds[i].name);
 		}
 
 		fclose(ham_fp);
-		mprintf( (0, "\n" ));
+		mprintf((0, "\n"));
 	}
 
-	fprintf( fp1, "Total sound size: %d bytes\n", data_offset-sound_data_start);
-	mprintf( (0, " Dumped %d assorted sounds.\n", Num_sound_files ));
-	fprintf( fp1, " Dumped %d assorted sounds.\n", Num_sound_files );
+	fprintf(fp1, "Total sound size: %d bytes\n", data_offset - sound_data_start);
+	mprintf((0, " Dumped %d assorted sounds.\n", Num_sound_files));
+	fprintf(fp1, " Dumped %d assorted sounds.\n", Num_sound_files);
 
 	fclose(fp1);
 	fclose(fp2);
@@ -1627,20 +1637,20 @@ void piggy_close()
 	if (BitmapBits)
 		free(BitmapBits);
 
-	if ( SoundBits )
-		free( SoundBits );
+	if (SoundBits)
+		free(SoundBits);
 
-	hashtable_free( &AllBitmapsNames );
-	hashtable_free( &AllDigiSndNames );
+	// hashtable_free( &AllBitmapsNames );
+	// hashtable_free( &AllDigiSndNames );
 
 }
 
-int piggy_does_bitmap_exist_slow( char * name )
+int piggy_does_bitmap_exist_slow(char* name)
 {
 	int i;
 
-	for (i=0; i<Num_bitmap_files; i++ )     {
-		if ( !strcmp( AllBitmaps[i].name, name) )
+	for (i = 0; i < Num_bitmap_files; i++) {
+		if (!strcmp(AllBitmaps[i].name, name))
 			return 1;
 	}
 	return 0;
@@ -1648,12 +1658,12 @@ int piggy_does_bitmap_exist_slow( char * name )
 
 
 #define NUM_GAUGE_BITMAPS 23
-char * gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
+char* gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
 	"gauge01", "gauge01b",
 	"gauge02", "gauge02b",
 	"gauge06", "gauge06b",
 	"targ01", "targ01b",
-	"targ02", "targ02b", 
+	"targ02", "targ02b",
 	"targ03", "targ03b",
 	"targ04", "targ04b",
 	"targ05", "targ05b",
@@ -1664,40 +1674,40 @@ char * gauge_bitmap_names[NUM_GAUGE_BITMAPS] = {
 };
 
 
-int piggy_is_gauge_bitmap( char * base_name )
+int piggy_is_gauge_bitmap(char* base_name)
 {
 	int i;
-	for (i=0; i<NUM_GAUGE_BITMAPS; i++ )    {
-		if ( !stricmp( base_name, gauge_bitmap_names[i] ))      
+	for (i = 0; i < NUM_GAUGE_BITMAPS; i++) {
+		if (!_stricmp(base_name, gauge_bitmap_names[i]))
 			return 1;
 	}
 
-	return 0;       
+	return 0;
 }
 
-int piggy_is_substitutable_bitmap( char * name, char * subst_name )
+int piggy_is_substitutable_bitmap(char* name, char* subst_name)
 {
 	int frame;
-	char * p;
-	char base_name[ 16 ];
-	
-	strcpy( subst_name, name );
-	p = strchr( subst_name, '#' );
-	if ( p )        {
-		frame = atoi( &p[1] );
+	char* p;
+	char base_name[16];
+
+	strcpy(subst_name, name);
+	p = strchr(subst_name, '#');
+	if (p) {
+		frame = atoi(&p[1]);
 		*p = 0;
-		strcpy( base_name, subst_name );
-		if ( !piggy_is_gauge_bitmap( base_name ))       {
-			sprintf( subst_name, "%s#%d", base_name, frame+1 );
-			if ( piggy_does_bitmap_exist_slow( subst_name )  )      {
-				if ( frame & 1 ) {
-					sprintf( subst_name, "%s#%d", base_name, frame-1 );
+		strcpy(base_name, subst_name);
+		if (!piggy_is_gauge_bitmap(base_name)) {
+			sprintf(subst_name, "%s#%d", base_name, frame + 1);
+			if (piggy_does_bitmap_exist_slow(subst_name)) {
+				if (frame & 1) {
+					sprintf(subst_name, "%s#%d", base_name, frame - 1);
 					return 1;
 				}
 			}
 		}
 	}
-	strcpy( subst_name, name );
+	strcpy(subst_name, name);
 	return 0;
 }
 
@@ -1710,7 +1720,7 @@ int piggy_is_substitutable_bitmap( char * name, char * subst_name )
 //		Page in a bitmap, if ddraw, then page it into a ddsurface in 
 //		'video' memory.  if that fails, page it in normally.
 
-void piggy_bitmap_page_in_w( bitmap_index bitmap, int ddraw )
+void piggy_bitmap_page_in_w(bitmap_index bitmap, int ddraw)
 {
 }
 

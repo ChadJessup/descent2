@@ -137,7 +137,7 @@ void Error(char *fmt,...)
 	vsprintf(exit_message+strlen(exit_message),fmt,arglist);
 	va_end(arglist);
 
-	Int3();
+	//Int3();
 
 	if (!initialized) print_exit_message();
 
@@ -158,7 +158,7 @@ void Warning(char *fmt,...)
 	vsprintf(warn_message+strlen(warn_message),fmt,arglist);
 	va_end(arglist);
 
-	mprintf((0, "%s\n", warn_message));
+	//mprintf((0, "%s\n", warn_message));
 	(*warn_func)(warn_message);
 
 }

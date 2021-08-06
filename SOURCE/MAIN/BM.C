@@ -11,6 +11,13 @@ AND AGREES TO THE TERMS HEREIN AND ACCEPTS THE SAME BY USE OF THIS FILE.
 COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 */
 
+#include "FIX.H"
+
+#define VCLIP_MAX_FRAMES	30
+#define MAX_SOUNDS 	254		//bad to have sound 255!
+
+
+
 #pragma off (unreferenced)
 static char rcsid[] = "$Id: bm.c 2.37 1996/10/16 15:03:28 jeremy Exp $";
 #pragma on (unreferenced)
@@ -26,10 +33,10 @@ static char rcsid[] = "$Id: bm.c 2.37 1996/10/16 15:03:28 jeremy Exp $";
 #include "mono.h"
 #include "error.h"
 #include "object.h"
-#include "vclip.h"
+//#include "vclip.h"
 #include "effects.h"
 #include "polyobj.h"
-#include "wall.h"
+//#include "wall.h"
 #include "textures.h"
 #include "game.h"
 #include "multi.h"
@@ -56,6 +63,30 @@ byte	ObjType[MAX_OBJTYPE];
 byte	ObjId[MAX_OBJTYPE];
 fix	ObjStrength[MAX_OBJTYPE];
 #endif
+
+#define MAX_CLIP_FRAMES			50
+#define MAX_POLYGON_MODELS 200
+
+typedef struct {
+	fix				play_time;			//total time (in seconds) of clip
+	int				num_frames;
+	fix				frame_time;			//time (in seconds) of each frame
+	int				flags;
+	short				sound_num;
+	bitmap_index	frames[VCLIP_MAX_FRAMES];
+	fix				light_value;
+} vclip2;
+
+typedef struct {
+	fix				play_time;
+	short				num_frames;
+	short				frames[MAX_CLIP_FRAMES];
+	short				open_sound;
+	short				close_sound;
+	short				flags;
+	char				filename[13];
+	char				pad;
+} wclip2;
 
 //for each model, a model number for dying & dead variants, or -1 if none
 int Dying_modelnums[MAX_POLYGON_MODELS];
@@ -549,9 +580,11 @@ void load_exit_models()
 // If editor is in, bm_init_use_table() is called.
 int bm_init()
 {
-	init_polygon_models();
-	if (! piggy_init())				// This calls bm_read_all
-		Error("Cannot open pig and/or ham file");
+//	init_polygon_models();
+	if (!piggy_init())				// This calls bm_read_all
+	{
+	//	Error("Cannot open pig and/or ham file");
+	}
 
 	piggy_read_sounds();
 
@@ -580,56 +613,56 @@ void bm_read_all(CFILE * fp)
 	cfread( Sounds, sizeof(ubyte), t, fp );
 	cfread( AltSounds, sizeof(ubyte), t, fp );
 
-	Num_vclips = cfile_read_int(fp);
+	int Num_vclips = cfile_read_int(fp);
 #ifndef MACINTOSH
-	cfread( Vclip, sizeof(vclip), Num_vclips, fp );
+	cfread( Vclip, sizeof(vclip2), Num_vclips, fp );
 #else
 	read_vclip_info(fp, Num_vclips, 0);
 #endif
 
-	Num_effects = cfile_read_int(fp);
+	int Num_effects = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Effects, sizeof(eclip), Num_effects, fp );
 #else	
 	read_effect_info(fp, Num_effects, 0);
 #endif
 
-	Num_wall_anims = cfile_read_int(fp);
+	int Num_wall_anims = cfile_read_int(fp);
 #ifndef MACINTOSH
-	cfread( WallAnims, sizeof(wclip), Num_wall_anims, fp );
+	cfread( WallAnims, sizeof(wclip2), Num_wall_anims, fp );
 #else
 	read_wallanim_info(fp, Num_wall_anims, 0);
 #endif
 
-	N_robot_types = cfile_read_int(fp);
+	int N_robot_types = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Robot_info, sizeof(robot_info), N_robot_types, fp );
 #else
 	read_robot_info(fp, N_robot_types, 0);
 #endif
 
-	N_robot_joints = cfile_read_int(fp);
+	int N_robot_joints = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Robot_joints, sizeof(jointpos), N_robot_joints, fp );
 #else
 	read_robot_joint_info(fp, N_robot_joints, 0);
 #endif
 
-	N_weapon_types = cfile_read_int(fp);
+	int N_weapon_types = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Weapon_info, sizeof(weapon_info), N_weapon_types, fp );
 #else
 	read_weapon_info(fp, N_weapon_types, 0);
 #endif
 
-	N_powerup_types = cfile_read_int(fp);
+	int N_powerup_types = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Powerup_info, sizeof(powerup_type_info), N_powerup_types, fp );
 #else
 	read_powerup_info(fp, N_powerup_types, 0);
 #endif
 	
-	N_polygon_models = cfile_read_int(fp);
+	int N_polygon_models = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Polygon_models, sizeof(polymodel), N_polygon_models, fp );
 #else
@@ -643,7 +676,7 @@ void bm_read_all(CFILE * fp)
 #ifdef MACINTOSH
 		swap_polygon_model_data(Polygon_models[i].model_data);
 #endif
-		g3_init_polygon_model(Polygon_models[i].model_data);
+		//g3_init_polygon_model(Polygon_models[i].model_data);
 	}
 
 	cfread( Dying_modelnums, sizeof(int), N_polygon_models, fp );
@@ -685,7 +718,7 @@ void bm_read_all(CFILE * fp)
 	read_player_ship(fp);
 #endif
 
-	Num_cockpits = cfile_read_int(fp);
+	int Num_cockpits = cfile_read_int(fp);
 	cfread( cockpit_bitmap, sizeof(bitmap_index), Num_cockpits, fp );
 #ifdef MACINTOSH
 	for (i = 0; i < Num_cockpits; i++)
@@ -697,16 +730,16 @@ void bm_read_all(CFILE * fp)
 //@@	cfread( ObjId, sizeof(byte), Num_total_object_types, fp );
 //@@	cfread( ObjStrength, sizeof(fix), Num_total_object_types, fp );
 
-	First_multi_bitmap_num = cfile_read_int(fp);
+	int First_multi_bitmap_num = cfile_read_int(fp);
 
-	Num_reactors = cfile_read_int(fp);
+	int Num_reactors = cfile_read_int(fp);
 #ifndef MACINTOSH
 	cfread( Reactors, sizeof(*Reactors), Num_reactors, fp);
 #else
 	read_reactor_info(fp, Num_reactors, 0);
 #endif
 
-	Marker_model_num = cfile_read_int(fp);
+	int Marker_model_num = cfile_read_int(fp);
 
 	//@@cfread( &N_controlcen_guns, sizeof(int), 1, fp );
 	//@@cfread( controlcen_gun_points, sizeof(vms_vector), N_controlcen_guns, fp );
@@ -806,7 +839,7 @@ void bm_read_extra_robots(char *fname,int type)
 			swap_polygon_model_data(Polygon_models[i].model_data);
 		#endif
 		
-		g3_init_polygon_model(Polygon_models[i].model_data);
+		//g3_init_polygon_model(Polygon_models[i].model_data);
 	}
 
 	cfread( &Dying_modelnums[N_D2_POLYGON_MODELS], sizeof(int), t, fp );
@@ -845,7 +878,10 @@ void bm_read_extra_robots(char *fname,int type)
 	cfclose(fp);
 }
 
-extern void change_filename_extension( char *dest, char *src, char *new_ext );
+void change_filename_extension( char *dest, char *src, char *new_ext )
+{
+
+}
 
 int Robot_replacements_loaded = 0;
 
@@ -915,7 +951,7 @@ void load_robot_replacements(char *level_name)
 		#ifdef MACINTOSH
 			swap_polygon_model_data(Polygon_models[i].model_data);
 		#endif
-		g3_init_polygon_model(Polygon_models[i].model_data);
+//		g3_init_polygon_model(Polygon_models[i].model_data);
 
 		Dying_modelnums[i] = cfile_read_int(fp);
 		Dead_modelnums[i] = cfile_read_int(fp);

@@ -132,7 +132,7 @@ void g3_get_view_vectors(vms_vector *forward,vms_vector *up,vms_vector *right);
 
 //returns true if a plane is facing the viewer. takes the unrotated surface 
 //normal of the plane, and a point on it.  The normal need not be normalized
-bool g3_check_normal_facing(vms_vector *v,vms_vector *norm);
+ubyte g3_check_normal_facing(vms_vector *v,vms_vector *norm);
 
 //Point definition and rotation functions:
 
@@ -170,15 +170,15 @@ ubyte g3_add_delta_vec(g3s_point *dest,g3s_point *src,vms_vector *deltav);
 
 //draw a flat-shaded face.
 //returns 1 if off screen, 0 if drew
-bool g3_draw_poly(int nv,g3s_point **pointlist);
+ubyte g3_draw_poly(int nv,g3s_point **pointlist);
 
 //draw a texture-mapped face.
 //returns 1 if off screen, 0 if drew
-bool g3_draw_tmap(int nv,g3s_point **pointlist,g3s_uvl *uvl_list,grs_bitmap *bm);
+ubyte g3_draw_tmap(int nv,g3s_point **pointlist,g3s_uvl *uvl_list,grs_bitmap *bm);
 
 //draw a sortof sphere - i.e., the 2d radius is proportional to the 3d
 //radius, but not to the distance from the eye
-g3_draw_sphere(g3s_point *pnt,fix rad);
+int g3_draw_sphere(g3s_point *pnt,fix rad);
 
 //@@//return ligting value for a point
 //@@fix g3_compute_lighting_value(g3s_point *rotated_point,fix normval);
@@ -190,23 +190,23 @@ g3_draw_sphere(g3s_point *pnt,fix rad);
 //is passed, this function works like g3_check_normal_facing() plus
 //g3_draw_poly().
 //returns -1 if not facing, 1 if off screen, 0 if drew
-bool g3_check_and_draw_poly(int nv,g3s_point **pointlist,vms_vector *norm,vms_vector *pnt);
-bool g3_check_and_draw_tmap(int nv,g3s_point **pointlist,g3s_uvl *uvl_list,grs_bitmap *bm,vms_vector *norm,vms_vector *pnt);
+ubyte g3_check_and_draw_poly(int nv,g3s_point **pointlist,vms_vector *norm,vms_vector *pnt);
+ubyte g3_check_and_draw_tmap(int nv,g3s_point **pointlist,g3s_uvl *uvl_list,grs_bitmap *bm,vms_vector *norm,vms_vector *pnt);
 
 //draws a line. takes two points.
-bool g3_draw_line(g3s_point *p0,g3s_point *p1);
+ubyte g3_draw_line(g3s_point *p0,g3s_point *p1);
 
 //draw a polygon that is always facing you
 //returns 1 if off screen, 0 if drew
-bool g3_draw_rod_flat(g3s_point *bot_point,fix bot_width,g3s_point *top_point,fix top_width);
+ubyte g3_draw_rod_flat(g3s_point *bot_point,fix bot_width,g3s_point *top_point,fix top_width);
 
 //draw a bitmap object that is always facing you
 //returns 1 if off screen, 0 if drew
-bool g3_draw_rod_tmap(grs_bitmap *bitmap,g3s_point *bot_point,fix bot_width,g3s_point *top_point,fix top_width,fix light);
+ubyte g3_draw_rod_tmap(grs_bitmap *bitmap,g3s_point *bot_point,fix bot_width,g3s_point *top_point,fix top_width,fix light);
 
 //draws a bitmap with the specified 3d width & height 
 //returns 1 if off screen, 0 if drew
-bool g3_draw_bitmap(vms_vector *pos,fix width,fix height,grs_bitmap *bm, int orientation);
+ubyte g3_draw_bitmap(vms_vector *pos,fix width,fix height,grs_bitmap *bm, int orientation);
 
 //specifies 2d drawing routines to use instead of defaults.  Passing
 //NULL for either or both restores defaults
@@ -219,7 +219,7 @@ void g3_set_interp_points(g3s_point *pointlist);
 
 //calls the object interpreter to render an object.  The object renderer
 //is really a seperate pipeline. returns true if drew
-bool g3_draw_polygon_model(void *model_ptr,grs_bitmap **model_bitmaps,vms_angvec *anim_angles,fix light,fix *glow_values);
+ubyte g3_draw_polygon_model(void *model_ptr,grs_bitmap **model_bitmaps,vms_angvec *anim_angles,fix light,fix *glow_values);
 
 //init code for bitmap models
 void g3_init_polygon_model(void *model_ptr);
@@ -228,7 +228,7 @@ void g3_init_polygon_model(void *model_ptr);
 void g3_uninit_polygon_model(void *model_ptr);
 
 //alternate interpreter for morphing object
-bool g3_draw_morphing_model(void *model_ptr,grs_bitmap **model_bitmaps,vms_angvec *anim_angles,fix light,vms_vector *new_points);
+ubyte g3_draw_morphing_model(void *model_ptr,grs_bitmap **model_bitmaps,vms_angvec *anim_angles,fix light,vms_vector *new_points);
 
 //this remaps the 15bpp colors for the models into a new palette.  It should
 //be called whenever the palette changes

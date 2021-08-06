@@ -186,7 +186,7 @@ void gr_init_canvas(grs_canvas *canv,unsigned char *pixdata,int pixtype, int w,i
 
 // Initialize the specified sub canvas. no memory allocation is performed.
 
-void gr_init_sub_canvas(grs_canvas *new,grs_canvas *src,int x,int y,int w, int h);
+void gr_init_sub_canvas(grs_canvas *neew,grs_canvas *src,int x,int y,int w, int h);
 
 // Free up the canvas and its pixel data.
 
@@ -247,7 +247,7 @@ void gr_use_palette_table(char * filename );
 // Drawing functions:
 
 // For solid, XOR, or other fill modes.
-gr_set_drawmode(int mode);
+void gr_set_drawmode(int mode);
 
 // Sets the color in the current canvas.  should be a macro
 // Use: gr_setcolor(int color);
@@ -259,8 +259,8 @@ void gr_setcolor(int color);
 // but not necessarily shaded as a concave polygon. It shouldn't hang.
 // probably good solution is to shade from minx to maxx on each scan line.
 // int should really be fix
-gr_poly(int nverts,int *verts);
-gr_upoly(int nverts,int *verts);
+void gr_poly(int nverts,int *verts);
+void gr_upoly(int nverts,int *verts);
 
 
 // Draws a point into the current canvas in the current color and drawmode.
@@ -318,7 +318,7 @@ void gr_remap_color_fonts();
 
 // Writes a string using current font. Returns the next column after last char.
 void gr_set_fontcolor( int fg, int bg );
-void gr_set_curfont( grs_font * new );
+void gr_set_curfont( grs_font * neew );
 int gr_string(int x, int y, char *s );
 int gr_ustring(int x, int y, char *s );
 int gr_printf( int x, int y, char * format, ... );

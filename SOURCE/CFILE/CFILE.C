@@ -50,8 +50,7 @@ int AltNum_hogfiles = 0;
 char HogFilename[64];
 char AltHogFilename[64];
 
-char AltHogDir[64];
-char AltHogdir_initialized = 0;
+
 
 // routine to take a DOS path and turn it into a macintosh
 // pathname.  This routine is based on the fact that we should
@@ -85,11 +84,6 @@ void cfile_use_alternate_hogdir( char * path )
 	}
 }
 
-//in case no one installs one
-int default_error_counter=0;
-
-//ptr to counter of how many critical errors
-int *critical_error_counter_ptr=&default_error_counter;
 
 //tell cfile about your critical error counter 
 void cfile_set_critical_error_counter_ptr(int *ptr)
@@ -98,30 +92,30 @@ void cfile_set_critical_error_counter_ptr(int *ptr)
 
 }
 
-
-FILE * cfile_get_filehandle( char * filename, char * mode )
-{
-	FILE * fp;
-	char temp[128];
-
-	*critical_error_counter_ptr = 0;
-	fp = fopen( filename, mode );
-	if ( fp && *critical_error_counter_ptr )	{
-		fclose(fp);
-		fp = NULL;
-	}
-	if ( (fp==NULL) && (AltHogdir_initialized) )	{
-		strcpy( temp, AltHogDir );
-		strcat( temp, filename );
-		*critical_error_counter_ptr = 0;
-		fp = fopen( temp, mode );
-		if ( fp && *critical_error_counter_ptr )	{
-			fclose(fp);
-			fp = NULL;
-		}
-	} 
-	return fp;
-}
+//
+//FILE * cfile_get_filehandle(const char * filename, const char * mode )
+//{
+//	FILE * fp;
+//	char temp[128];
+//
+//	*critical_error_counter_ptr = 0;
+//	fp = fopen( filename, mode );
+//	if ( fp && *critical_error_counter_ptr )	{
+//		fclose(fp);
+//		fp = NULL;
+//	}
+//	if ( (fp==NULL) && (AltHogdir_initialized) )	{
+//		strcpy( temp, AltHogDir );
+//		strcat( temp, filename );
+//		*critical_error_counter_ptr = 0;
+//		fp = fopen( temp, mode );
+//		if ( fp && *critical_error_counter_ptr )	{
+//			fclose(fp);
+//			fp = NULL;
+//		}
+//	} 
+//	return fp;
+//}
 
 //returns 1 if file loaded with no errors
 int cfile_init_hogfile(char *fname, hogfile * hog_files, int * nfiles )
@@ -174,7 +168,7 @@ int cfile_init(char *hogname)
 	macify_dospath(hogname, mac_path);
 	#endif
 	
-	Assert(Hogfile_initialized == 0);
+	//Assert(Hogfile_initialized == 0);
 
 	#ifndef MACINTOSH
 	if (cfile_init_hogfile(hogname, HogFiles, &Num_hogfiles )) {
@@ -191,41 +185,41 @@ int cfile_init(char *hogname)
 }
 
 
-FILE * cfile_find_libfile(char * name, int * length)
-{
-	FILE * fp;
-	int i;
-
-	if ( AltHogfile_initialized )	{
-		for (i=0; i<AltNum_hogfiles; i++ )	{
-			if ( !_stricmp( AltHogFiles[i].name, name ))	{
-				fp = cfile_get_filehandle( AltHogFilename, "rb" );
-				if ( fp == NULL ) return NULL;
-				fseek( fp,  AltHogFiles[i].offset, SEEK_SET );
-				*length = AltHogFiles[i].length;
-				return fp;
-			}
-		}
-	}
-
-	if ( !Hogfile_initialized ) 	{
-		//@@cfile_init_hogfile( "DESCENT2.HOG", HogFiles, &Num_hogfiles );
-		//@@Hogfile_initialized = 1;
-
-		//Int3();	//hogfile ought to be initialized
-	}
-
-	for (i=0; i<Num_hogfiles; i++ )	{
-		if ( !_stricmp( HogFiles[i].name, name ))	{
-			fp = cfile_get_filehandle( HogFilename, "rb" );
-			if ( fp == NULL ) return NULL;
-			fseek( fp,  HogFiles[i].offset, SEEK_SET );
-			*length = HogFiles[i].length;
-			return fp;
-		}
-	}
-	return NULL;
-}
+//FILE * cfile_find_libfile(const char * name, int * length)
+//{
+//	FILE * fp;
+//	int i;
+//
+//	if ( AltHogfile_initialized )	{
+//		for (i=0; i<AltNum_hogfiles; i++ )	{
+//			if ( !_stricmp( AltHogFiles[i].name, name ))	{
+//				fp = cfile_get_filehandle( AltHogFilename, "rb" );
+//				if ( fp == NULL ) return NULL;
+//				fseek( fp,  AltHogFiles[i].offset, SEEK_SET );
+//				*length = AltHogFiles[i].length;
+//				return fp;
+//			}
+//		}
+//	}
+//
+//	if ( !Hogfile_initialized ) 	{
+//		//@@cfile_init_hogfile( "DESCENT2.HOG", HogFiles, &Num_hogfiles );
+//		//@@Hogfile_initialized = 1;
+//
+//		//Int3();	//hogfile ought to be initialized
+//	}
+//
+//	for (i=0; i<Num_hogfiles; i++ )	{
+//		if ( !_stricmp( HogFiles[i].name, name ))	{
+//			fp = cfile_get_filehandle( HogFilename, "rb" );
+//			if ( fp == NULL ) return NULL;
+//			fseek( fp,  HogFiles[i].offset, SEEK_SET );
+//			*length = HogFiles[i].length;
+//			return fp;
+//		}
+//	}
+//	return NULL;
+//}
 
 int cfile_use_alternate_hogfile( char * name )
 {
@@ -275,57 +269,57 @@ int cfexist( char * filename )
 }
 
 
-CFILE * cfopen(char * filename, char * mode ) 
-{
-	int length;
-	FILE * fp;
-	CFILE *cfile;
-	
-	if (_stricmp( mode, "rb"))	{
-		Error( "cfiles can only be opened with mode==rb\n" );
-	}
-
-	if (filename[0] != '\x01') {
-		#ifdef MACINTOSH
-		char mac_path[255];
-		
-		macify_dospath(filename, mac_path);
-		fp = cfile_get_filehandle( mac_path, mode);
-		#else
-		fp = cfile_get_filehandle( filename, mode );		// Check for non-hog file first...
-		#endif
-	} else {
-		fp = NULL;		//don't look in dir, only in hogfile
-		filename++;
-	}
-
-	if ( !fp ) {
-		fp = cfile_find_libfile(filename, &length );
-		if ( !fp )
-			return NULL;		// No file found
-		cfile = malloc ( sizeof(CFILE) );
-		if ( cfile == NULL ) {
-			fclose(fp);
-			return NULL;
-		}
-		cfile->file = fp;
-		cfile->size = length;
-		cfile->lib_offset = ftell( fp );
-		cfile->raw_position = 0;
-		return cfile;
-	} else {
-		cfile = malloc ( sizeof(CFILE) );
-		if ( cfile == NULL ) {
-			fclose(fp);
-			return NULL;
-		}
-		cfile->file = fp;
-		cfile->size = filelength( _fileno(fp) );
-		cfile->lib_offset = 0;
-		cfile->raw_position = 0;
-		return cfile;
-	}
-}
+// CFILE * cfopen(const char * filename, const char * mode ) 
+// {
+// 	int length;
+// 	FILE * fp;
+// 	CFILE *cfile;
+// 	
+// 	if (_stricmp( mode, "rb"))	{
+// 		Error( "cfiles can only be opened with mode==rb\n" );
+// 	}
+// 
+// 	if (filename[0] != '\x01') {
+// 		#ifdef MACINTOSH
+//		char mac_path[255];
+//		
+//		macify_dospath(filename, mac_path);
+//		fp = cfile_get_filehandle( mac_path, mode);
+// 		#else
+// 		fp = cfile_get_filehandle( filename, mode );		// Check for non-hog file first...
+// 		#endif
+// 	} else {
+// 		fp = NULL;		//don't look in dir, only in hogfile
+// 		filename++;
+// 	}
+// 
+// 	if ( !fp ) {
+// 		fp = cfile_find_libfile(filename, &length );
+// 		if ( !fp )
+// 			return NULL;		// No file found
+// 		cfile = malloc ( sizeof(CFILE) );
+// 		if ( cfile == NULL ) {
+// 			fclose(fp);
+// 			return NULL;
+// 		}
+// 		cfile->file = fp;
+// 		cfile->size = length;
+// 		cfile->lib_offset = ftell( fp );
+// 		cfile->raw_position = 0;
+// 		return cfile;
+// 	} else {
+// 		cfile = malloc ( sizeof(CFILE) );
+// 		if ( cfile == NULL ) {
+// 			fclose(fp);
+// 			return NULL;
+// 		}
+// 		cfile->file = fp;
+// 		cfile->size = filelength( _fileno(fp) );
+// 		cfile->lib_offset = 0;
+// 		cfile->raw_position = 0;
+// 		return cfile;
+// 	}
+// }
 
 int cfilelength( CFILE *fp )
 {

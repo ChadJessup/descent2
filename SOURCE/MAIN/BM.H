@@ -16,6 +16,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
 
 #include "gr.h"
 #include "piggy.h"
+#include "CFILE.H"
 
 #define MAX_TEXTURES		1200
 
@@ -94,7 +95,7 @@ extern ushort ObjBitmapPtrs[MAX_OBJ_BITMAPS];
 extern int First_multi_bitmap_num;
 
 // Initializes all bitmaps from BITMAPS.TBL file.
-int bm_init_use_tbl(void);
-
+//int bm_init_use_tbl(void);
+void bm_read_all(CFILE* fp);
 #endif
 

@@ -44,11 +44,13 @@ draw_vclip_object(object *obj,fix timeleft,int lighted, int vclip_num)
 	if (bitmapnum >= 0 )	{
 
 		if (Vclip[vclip_num].flags & VF_ROD)
-			draw_object_tmap_rod(obj, Vclip[vclip_num].frames[bitmapnum],lighted);
+		{
+			//draw_object_tmap_rod(obj, Vclip[vclip_num].frames[bitmapnum], lighted);
+		}
 		else {
 			Assert(lighted==0);		//blob cannot now be lighted
 
-			draw_object_blob(obj, Vclip[vclip_num].frames[bitmapnum] );
+			//draw_object_blob(obj, Vclip[vclip_num].frames[bitmapnum] );
 		}
 	}
 
@@ -94,7 +96,7 @@ void draw_weapon_vclip(object *obj)
 			modtime -= play_time;
 	}
 
-	draw_vclip_object(obj, modtime, 0, vclip_num);
+	//draw_vclip_object(obj, modtime, 0, vclip_num);
 
 }
 

@@ -24,7 +24,8 @@ typedef unsigned int uint;
 typedef unsigned long ulong;
 
 //define a boolean
-typedef ubyte bool;
+//typedef byte BOOL;
+
 
 #ifndef NULL
 #define NULL 0

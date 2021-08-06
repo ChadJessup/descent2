@@ -36,7 +36,7 @@ static char rcsid[] = "$Id: polyobj.c 2.13 1996/07/10 16:14:59 jed Exp $";
 #include "args.h"
 
 #ifndef DRIVE
-#include "texmap.h"
+// #include "texmap.h"
 #include "bm.h"
 #include "textures.h"
 #include "object.h"

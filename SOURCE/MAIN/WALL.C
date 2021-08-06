@@ -227,7 +227,7 @@ void wall_reset(segment *seg, int side)
 	i = seg->sides[side].wall_num;
 
 	if (i==-1) {
-		mprintf((0, "Resetting Illegal Wall\n"));
+		// mprintf((0, "Resetting Illegal Wall\n"));
 		return;
 	}
 
@@ -317,7 +317,7 @@ void wall_damage(segment *seg, int side, fix damage)
 	int a, i, n;
 
 	if (seg->sides[side].wall_num == -1) {
-		mprintf((0, "Damaging illegal wall\n"));
+		//// mprintf((0, "Damaging illegal wall\n"));
 		return;
 	}
 
@@ -593,7 +593,7 @@ void start_wall_decloak(segment *seg, int side)
 		if (Num_cloaking_walls >= MAX_CLOAKING_WALLS) {		//no more!
 			Int3();		//ran out of cloaking wall slots
 			w->type = WALL_CLOSED;
-			Walls[csegp->sides[Connectside].wall_num].type = WALL_CLOSED;
+			//Walls[csegp->sides[Connectside].wall_num].type = WALL_CLOSED;
 			return;
 		}
 		Num_cloaking_walls++;
@@ -910,7 +910,7 @@ void do_door_close(int door_num)
 		side = w->sidenum;
 	
 		if (seg->sides[side].wall_num == -1) {
-			mprintf((0, "Trying to do_door_close on Illegal wall\n"));
+			//// mprintf((0, "Trying to do_door_close on Illegal wall\n"));
 			return;
 		}
 	
@@ -977,7 +977,8 @@ void wall_illusion_off(segment *seg, int side)
 	Assert(cside != -1);
 
 	if (seg->sides[side].wall_num == -1) {
-		mprintf((0, "Trying to shut off illusion illegal wall\n"));
+
+//		// mprintf((0, "Trying to shut off illusion illegal wall\n"));
 		return;
 	}
 
@@ -1001,7 +1002,7 @@ void wall_illusion_on(segment *seg, int side)
 	Assert(cside != -1);
 
 	if (seg->sides[side].wall_num == -1) {
-		mprintf((0, "Trying to turn on illusion illegal wall\n"));
+//		// mprintf((0, "Trying to turn on illusion illegal wall\n"));
 		return;
 	}
 
@@ -1122,7 +1123,7 @@ void wall_toggle(segment *seg, int side)
 	wall_num = seg->sides[side].wall_num;
 
 	if (wall_num == -1) {
-	 	mprintf((0, "Illegal wall_toggle\n"));
+//	 	// mprintf((0, "Illegal wall_toggle\n"));
 		return;
 	}
 
@@ -1145,7 +1146,7 @@ void reset_walls()
 	int i;
 
 	if (Num_walls < 0) {
-		mprintf((0, "Illegal Num_walls\n"));
+		// mprintf((0, "Illegal Num_walls\n"));
 		return;
 	}
 
@@ -1205,8 +1206,8 @@ do_cloaking_wall_frame(int cloaking_wall_num)
 		light_scale = fixdiv(CLOAKING_WALL_TIME/2-d->time,CLOAKING_WALL_TIME/2);
 
 		for (i=0;i<4;i++) {
-			Segments[wfront->segnum].sides[wfront->sidenum].uvls[i].l = fixmul(d->front_ls[i],light_scale);
-			Segments[wback->segnum].sides[wback->sidenum].uvls[i].l = fixmul(d->back_ls[i],light_scale);
+			//Segments[wfront->segnum].sides[wfront->sidenum].uvls[i].l = fixmul(d->front_ls[i],light_scale);
+			//Segments[wback->segnum].sides[wback->sidenum].uvls[i].l = fixmul(d->back_ls[i],light_scale);
 		}
 	}
 
@@ -1345,13 +1346,15 @@ void add_stuck_object(object *objp, int segnum, int sidenum)
 				Stuck_objects[i].wallnum = wallnum;
 				Stuck_objects[i].objnum = objp-Objects;
 				Stuck_objects[i].signature = objp->signature;
-				// mprintf((0, "Added wall %i at index %i\n", wallnum, i));
+				// // mprintf((0, "Added wall %i at index %i\n", wallnum, i));
 				Num_stuck_objects++;
 				break;
 			}
 		}
 		if (i == MAX_STUCK_OBJECTS)
-			mprintf((1, "Warning: Unable to add object %i which got stuck in wall %i to Stuck_objects\n", objp-Objects, wallnum));
+		{
+			//// mprintf((1, "Warning: Unable to add object %i which got stuck in wall %i to Stuck_objects\n", objp - Objects, wallnum));
+		}
 	}
 
 
@@ -1399,7 +1402,7 @@ void kill_stuck_objects(int wallnum)
 			if (Objects[Stuck_objects[i].objnum].type == OBJ_WEAPON) {
 				Objects[Stuck_objects[i].objnum].lifeleft = F1_0/8;
 			} else
-				mprintf((1, "Warning: Stuck object of type %i, expected to be of type %i, see wall.c\n", Objects[Stuck_objects[i].objnum].type, OBJ_WEAPON));
+				//// mprintf((1, "Warning: Stuck object of type %i, expected to be of type %i, see wall.c\n", Objects[Stuck_objects[i].objnum].type, OBJ_WEAPON));
 				// Int3();	//	What?  This looks bad.  Object is not a weapon and it is stuck in a wall!
 			Stuck_objects[i].wallnum = -1;
 		} else if (Stuck_objects[i].wallnum != -1) {

@@ -93,7 +93,18 @@
       C:\Projects\descent2\SOURCE\vga;
       C:\Projects\descent2\SOURCE\iff;
       C:\Projects\descent2\SOURCE\vecmat;
-      C:\Projects\descent2\SOURCE\main;C:\Projects\descent2\SOURCE\2d;C:\Projects\descent2\SOURCE\3d;C:\Projects\descent2\SOURCE\CFILE;C:\Projects\descent2\SOURCE\MISC;C:\Projects\descent2\SOURCE\PA_NULL;C:\Projects\descent2\SOURCE\BIOS\;C:\Projects\descent2\SOURCE\MEM;C:\Projects\descent2\SOURCE\FIX;C:\Projects\descent2\SOURCE\;C:\Projects\descent2\SOURCE\INCLUDES;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      C:\Projects\descent2\SOURCE\main;
+      C:\Projects\descent2\SOURCE\2d;
+      C:\Projects\descent2\SOURCE\3d;
+      C:\Projects\descent2\SOURCE\CFILE;
+      C:\Projects\descent2\SOURCE\MISC;
+      C:\Projects\descent2\SOURCE\PA_NULL;
+      C:\Projects\descent2\SOURCE\BIOS\;
+      C:\Projects\descent2\SOURCE\MEM;
+      C:\Projects\descent2\SOURCE\FIX;
+      C:\Projects\descent2\SOURCE\;
+      C:\Projects\descent2\SOURCE\INCLUDES;
+      %(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
